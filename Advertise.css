@@ -1,0 +1,67 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  color: #333;
+  padding: 20px;
+}
+
+.advertise-wrapper {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.ad-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.ad-form input,
+.ad-form textarea {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.ad-form button {
+  padding: 12px;
+  font-size: 16px;
+  background: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.ad-form button:hover {
+  background: #0056b3;
+}
+
+.alt-contact {
+  margin-top: 30px;
+  font-size: 16px;
+}
+
+.alt-contact a {
+  color: #007BFF;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.alt-contact a:hover {
+  text-decoration: underline;
+}

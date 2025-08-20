@@ -396,12 +396,13 @@ header, footer{
 }
 #cookie-banner {
   position: fixed;
-  bottom: -200px;
+  bottom: -300px;
   left: 0;
+  height: 250px;
   width: 100%;
-  background: #8B4513;
-  color: white;
-  padding: 40px;
+  background: #f0f0f0;
+  color: #111;
+  padding: 15px;
   text-align: center;
   box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
   transition: bottom 0.5s ease;
@@ -413,11 +414,11 @@ header, footer{
 }
 
 #cookie-banner button {
- padding: 8px 16px;
-  background: #007bff;
-  color: #fff;
+padding: 10px 30px;
+  background: blue;
+  color: white;
   border: none;
-  margin-top: 10px;
+  margin-top: 70px;
   cursor: pointer;
-    }
+    }    
   

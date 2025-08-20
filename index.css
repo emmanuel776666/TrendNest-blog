@@ -394,3 +394,30 @@ header, footer{
     gap: 20px;
  }
 }
+#cookie-banner {
+  position: fixed;
+  bottom: -200px;
+  left: 0;
+  width: 100%;
+  background: #f1f1f1;
+  color: #000;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  transition: bottom 0.5s ease;
+  z-index: 9999;
+}
+
+#cookie-banner.show {
+  bottom: 0;
+}
+
+#cookie-banner button {
+ padding: 8px 16px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+    }
+  

@@ -399,9 +399,9 @@ header, footer{
   bottom: -200px;
   left: 0;
   width: 100%;
-  background: #222;
+  background: #8B4513;
   color: white;
-  padding: 25px;
+  padding: 40px;
   text-align: center;
   box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
   transition: bottom 0.5s ease;

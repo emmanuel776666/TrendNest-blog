@@ -95,3 +95,28 @@ document.addEventListener('contextmenu', function(e) {
       e.preventDefault();
     }
 });
+
+// Check if accepted before
+if (!localStorage.getItem('cookieAccepted')) {
+  const banner = document.createElement('div');
+  banner.id = 'cookie-banner';
+  banner.innerHTML = `
+    <p>
+      This website uses cookies to improve user experience, show ads, and analyze traffic (including IP address data).
+      By using this site, you agree to our use of cookies.
+    </p>
+    <button id="acceptCookies">Accept All</button>
+  `;
+  document.body.appendChild(banner);
+
+  // Show after 10 seconds
+  setTimeout(() => {
+    banner.classList.add('show');
+  }, 10000);
+
+  // On click, hide and remember
+  document.getElementById('acceptCookies').onclick = () => {
+    localStorage.setItem('cookieAccepted', 'yes');
+    banner.style.display = 'none';
+  };
+}

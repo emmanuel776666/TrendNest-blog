@@ -414,11 +414,16 @@ header, footer{
 }
 
 #cookie-banner button {
-padding: 10px 30px;
+padding: 15px 700px;
   background: blue;
   color: white;
   border: none;
-  margin-top: 70px;
+  margin-top: 40px;
   cursor: pointer;
-    }    
+    }   
+#head1 {
+  color: black;
+  font-size: 19;
+  margin-bottom: 8px;
+}
   

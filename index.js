@@ -101,7 +101,7 @@ if (!localStorage.getItem('cookieAccepted')) {
   const banner = document.createElement('div');
   banner.id = 'cookie-banner';
   banner.innerHTML = `
-    <p>
+   <p id="head1"><strong>Consent to cookies & data processing</strong></p> <p>
       This website uses cookies to improve user experience, show ads, and analyze traffic (including IP address data).
       By using this site, you agree to our use of cookies.
     </p>

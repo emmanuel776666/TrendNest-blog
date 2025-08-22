@@ -408,6 +408,12 @@ header, footer{
   transition: bottom 0.5s ease;
   z-index: 9999;
 }
+#cookie-banner p{
+  text-align: justify;
+}
+#cookie-banner: hover{
+  background: pink;
+}
 
 #cookie-banner.show {
   bottom: 0;

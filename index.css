@@ -407,7 +407,7 @@ header, footer{
   box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
   transition: bottom 0.5s ease;
   z-index: 9999;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 #cookie-banner p{
   text-align: justify;
@@ -425,12 +425,12 @@ padding: 15px 70px;
   background: blue;
   color: white;
   border: none;
-  margin-top: 40px;
+  margin-top: 35px;
   cursor: pointer;
     }   
 #head1 {
   color: black;
-  font-size: 19;
+  font-size: 19px;
   margin-bottom: 8px;
 }
   

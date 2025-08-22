@@ -412,7 +412,7 @@ header, footer{
 #cookie-banner p{
   text-align: justify;
 }
-#cookie-banner:hover{
+#cookie-banner button:hover{
   background: pink;
 }
 

@@ -1,4 +1,4 @@
-/* Reset */
+  /* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -430,7 +430,7 @@ padding: 15px 70px;
     }   
 #head1 {
   color: black;
-  font-size: 14px;
+  font-size: 17px;
   margin-bottom: 8px;
 }
   

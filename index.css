@@ -394,6 +394,43 @@ header, footer{
     gap: 20px;
  }
 }
+@media(min-width: 160px) and (max-width: 349px) {
+  .hamburger {
+    font-size: 15px;
+  }
+  .subscribe-btn {
+    text-decoration: none;
+    padding: 0px 0px;
+    font-size: 8px;
+    float: none;
+    position: relative;
+
+  }
+  .header {
+    width: 100%;
+   padding: 5px 20px;
+  }
+
+  .logo {
+font-size: 8px;
+font-weight: none;
+
+}
+
+.related-item {
+  flex-direction: column;
+  align-items: flex-start;
+}
+  .related-item img {
+    width: 100%;
+  }
+  .related-item p {
+    text-align: left;
+    font-size: 10px;
+  }
+
+}
+
 #cookie-banner {
   position: fixed;
   bottom: -300px;

@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://www.trend-nest-latest-blog.name.ng/sitemap.xml
+Sitemap: https://www.trend-nest-latest-blog.name.ng/sitemap-remakelebu.xml
+

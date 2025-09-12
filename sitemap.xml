@@ -5,134 +5,134 @@
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/</loc>
     <priority>1.0</priority>
-    <changefreq>daily</changefreq>
+    <changefreq>always</changefreq>
   </url>
 
   <!-- Blogs -->
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog1.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog2.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog3.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog4.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog5.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog6.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog7.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog8.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog9.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog10.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog11.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog12.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog13.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog14.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog15.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog16.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog17.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog18.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog19.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/blog20.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
 
   <!-- Article1 -->
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/Article1.html</loc>
     <priority>0.8</priority>
-    <changefreq>monthly</changefreq>
+    <changefreq>always</changefreq>
   </url>
   
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/about.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
 
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/contactus.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
 
   <url>
     <loc>https://www.trend-nest-latest-blog.name.ng/privacy.html</loc>
     <priority>0.9</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>always</changefreq>
   </url>
 
 </urlset>

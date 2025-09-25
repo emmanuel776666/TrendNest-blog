@@ -7,11 +7,20 @@
     <language>en-us</language>
 
     <item>
-      <title>Ballon d’Or 2025: Dembélé Crowned Winner, Full Results and Ceremony Highlights</title>
-      <link>https://www.trend-nest-latest-blog.name.ng/Article1.html</link>
-      <description>Dembélé has been crowned the winner of the 2025 Ballon d’Or. Check out the full results and highlights from the ceremony.</description>
-      <pubDate>Thu, 25 Sep 2025 14:00:00 +0000</pubDate>
-    </item>
+  <title>Ballon d’Or 2025: Dembélé Crowned Winner, Full Results and Ceremony Highlights</title>
+  <link>https://www.trend-nest-latest-blog.name.ng/Article1.html</link>
+  <guid isPermaLink="true">https://www.trend-nest-latest-blog.name.ng/Article1.html</guid>
+  <pubDate>Thu, 25 Sep 2025 14:00:00 +0000</pubDate>
+  <description><![CDATA[
+    Dembélé has been crowned the winner of the 2025 Ballon d’Or. Check out the full results and highlights from the ceremony.
+  ]]></description>
 
+  <!-- Standard enclosure (works in many feed readers) -->
+  <enclosure url="https://i.ibb.co/p6K59GVb/20250923-081858.webp" type="image/webp" />
+
+  <!-- Media RSS (some readers and Google News honor this) -->
+  <media:content url="https://i.ibb.co/p6K59GVb/20250923-081858.webp" medium="image" />
+  <media:thumbnail url="https://raw.githubusercontent.com/emmanuel776666/TrendNest-blog/refs/heads/main/IMG-20250818-WA0002.png" />
+</item>
   </channel>
 </rss>

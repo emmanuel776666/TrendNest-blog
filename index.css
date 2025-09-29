@@ -23,6 +23,17 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* Prevent auto ads from breaking responsiveness */
+ins.adsbygoogle {
+  max-width: 100% !important;
+  display: block !important;
+  height: auto !important;
+}
+
+ins.adsbygoogle iframe {
+  max-width: 100% !important;
+}
+
 .page-wrapper {
   display: block;
 }

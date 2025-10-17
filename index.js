@@ -48,7 +48,9 @@ const relatedBlocksData = [
   { link: "blog17.html", title: "How People Are Using ChatGPT to Earn Real Income in 2025", img: "https://i.ibb.co/KcqkjyVQ/IMG-20250810-WA0004.webp", loading: "lazy" },
   { link: "blog18.html", title: "7 Smart Ways to Use ChatGPT Every Day and Save Hours of Work", img: "https://i.ibb.co/yFMfZDyj/IMG-20250810-WA0006.webp", loading: "lazy" },
   { link: "blog19.html", title: "10 Courses to Study in 2025 That Will Land You a Valuable Job", img: "https://i.ibb.co/1Y6CkqtX/file-000000002f5461f4a37cabe5a78e8837.webp", loading: "lazy" },
-  { link: "blog20.html", title: "Top 10 Short Courses & Certifications to Boost Your Career Fast in 2025", img: "https://i.ibb.co/2DnrCY1/IMG-20250810-WA0011.webp", loading: "lazy" }
+  { link: "blog20.html", title: "Top 10 Short Courses & Certifications to Boost Your Career Fast in 2025", img: "https://i.ibb.co/2DnrCY1/IMG-20250810-WA0011.webp", loading: "lazy" },
+  { link: "kindle.html", title: "Best Amazon Kindle eReaders 2025 – Prices, Reviews & Where to Buy Online", img: "https://i.ibb.co/PsWcfh4s/Y2-Rm-MTcz-YTUt-CB544958490.webp", loading: "lazy" }
+  
 ];
 // Merge both lists for shuffling
 let combinedList = [...peopleAlsoSearchData, ...relatedBlocksData];

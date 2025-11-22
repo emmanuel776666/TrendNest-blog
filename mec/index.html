@@ -192,22 +192,16 @@
   </div>
   <div class="cursor-light"></div>
 <script>
-function restartAnimation() {
-  const c = document.querySelector('.content');
-  if (!c) return;
+window.addEventListener("pageshow", () => {
+  const elements = document.querySelectorAll('.content, .cantent');
 
-  c.style.animation = "none";
-  void c.offsetHeight; // force reflow
-  c.style.animation = "fadeInUp 1.5s ease forwards";
-}
-
-// When page is shown (normal load or back button)
-window.addEventListener("pageshow", restartAnimation);
-
-// Also restart on load (for some laptops)
-window.addEventListener("load", restartAnimation);
+  elements.forEach((c) => {
+    c.style.animation = "none";
+    void c.offsetWidth;
+    c.style.animation = "fadeInUp 1.5s ease forwards";
+  });
+});
 </script>
-  <script>
   const light = document.querySelector('.cursor-light');
 
   document.addEventListener('mousemove', (e) => {

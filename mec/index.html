@@ -191,16 +191,22 @@
 
   </div>
   <div class="cursor-light"></div>
-  <script>
-window.addEventListener("pageshow", (e) => {
-  if (e.persisted) {
-    const c = document.querySelector('.content');
-    c.style.animation = "none";
-    c.offsetHeight;
-    c.style.animation = "fadeInUp 1.5s ease forwards";
-  }
-});
-  </script>
+<script>
+function restartAnimation() {
+  const c = document.querySelector('.content');
+  if (!c) return;
+
+  c.style.animation = "none";
+  void c.offsetHeight; // force reflow
+  c.style.animation = "fadeInUp 1.5s ease forwards";
+}
+
+// When page is shown (normal load or back button)
+window.addEventListener("pageshow", restartAnimation);
+
+// Also restart on load (for some laptops)
+window.addEventListener("load", restartAnimation);
+</script>
   <script>
   const light = document.querySelector('.cursor-light');
 

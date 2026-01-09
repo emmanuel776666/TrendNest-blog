@@ -1,9 +1,12 @@
 {
-  "name": "appwrite-function",
+  "name": "slug-generator",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js"
   },
-  "dependencies": {}
+  "dependencies": {
+    "node-appwrite": "^11.0.0"
+  }
 }

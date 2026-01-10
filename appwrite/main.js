@@ -38,4 +38,4 @@ export default async ({ req, res, log, error }) => {
   } catch (err) {
     error("Failed to update document: " + err.message);
     return res.json({ success: false, error: err.message });
-  }
+  };

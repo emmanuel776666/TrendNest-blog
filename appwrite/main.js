@@ -26,7 +26,7 @@ export default async ({ req, res, log, error }) => {
     .replace(/-+/g, "-");
 
   // Step 2: limit to 10 characters
-  newSlug = newSlug.substring(0, 10);
+  newSlug = newSlug.substring(0, 30);
 
   // Step 3: remove trailing dash if it cut in the middle
   newSlug = newSlug.replace(/-+$/, "");

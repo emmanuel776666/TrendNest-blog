@@ -1,6 +1,8 @@
 import { Client, Databases } from "node-appwrite";
 
 export default async ({ req, res, log, error }) => {
+  log("Function triggered!");
+
   try {
     let payload = req.body || {};
 

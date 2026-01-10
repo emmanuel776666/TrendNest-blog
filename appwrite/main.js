@@ -2,22 +2,20 @@ import { Client, Databases } from "node-appwrite";
 
 export default async ({ req, res, log, error }) => {
   try {
-    // Default payload (manual execution)
     let payload = req.body || {};
 
-    // Automatic triggers send event.payload
+    // If triggered automatically, read event payload
     if (payload.event && payload.event.payload) {
       payload = payload.event.payload;
     }
 
     const { $databaseId, $collectionId, $id, title } = payload;
 
-    // Validate
     if (!title || !$databaseId || !$collectionId || !$id) {
-      return res.json({ message: "Missing required fields" });
+      return res.json({ message: "Missing required fields in payload" });
     }
 
-    // Generate slug
+    // Generate slug (max 10 chars)
     let newSlug = title
       .toLowerCase()
       .trim()
@@ -34,7 +32,6 @@ export default async ({ req, res, log, error }) => {
 
     const databases = new Databases(client);
 
-    // Update the document directly
     await databases.updateDocument($databaseId, $collectionId, $id, { slug: newSlug });
 
     return res.json({ success: true, slug: newSlug });

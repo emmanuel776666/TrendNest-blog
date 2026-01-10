@@ -2,19 +2,17 @@ import { Client, Databases } from "node-appwrite";
 
 export default async ({ req, res, log, error }) => {
   try {
-    // Step 1: Get the payload (manual execution or automatic trigger)
+    // Get payload
     let payload = req.body || {};
     if (payload.event && payload.event.payload) {
       payload = payload.event.payload;
     }
 
-    // Step 2: Log immediately to see what Appwrite sent
-    log("Function triggered!", payload); // ✅ now payload is defined
+    log("Function triggered!", payload); // Optional: keep for debugging
 
-    // Step 3: Extract fields
-    const { $databaseId, $collectionId, $id, title, slug: currentSlug } = payload;
+    const { $databaseId, $tableId, $id, title, slug: currentSlug } = payload;
 
-    if (!title || !$databaseId || !$collectionId || !$id) {
+    if (!title || !$databaseId || !$tableId || !$id) {
       return res.json({ message: "Missing required fields in payload" });
     }
 
@@ -35,7 +33,8 @@ export default async ({ req, res, log, error }) => {
 
     const databases = new Databases(client);
 
-    await databases.updateDocument($databaseId, $collectionId, $id, { slug: newSlug });
+    // Update the document
+    await databases.updateDocument($databaseId, $tableId, $id, { slug: newSlug });
 
     return res.json({ success: true, slug: newSlug });
   } catch (err) {

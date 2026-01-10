@@ -1,0 +1,12 @@
+{
+  "name": "starter function",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^11.0.0"
+  }
+}

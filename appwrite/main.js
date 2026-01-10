@@ -9,7 +9,7 @@ export default async ({ req, res, log, error }) => {
   const databases = new Databases(client);
 
   let document = req.body;
-  if (typeof document === 'string') document = JSON.parse(document);
+  if (typeof document === "string") document = JSON.parse(document);
 
   const { $databaseId, $collectionId, $id, title, slug: currentSlug } = document;
 
@@ -17,19 +17,29 @@ export default async ({ req, res, log, error }) => {
     return res.json({ message: "Slug not generated: title missing" });
   }
 
-  const newSlug = title
+  // Step 1: clean the title
+  let newSlug = title
     .toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 
+  // Step 2: limit to 10 characters
+  newSlug = newSlug.substring(0, 10);
+
+  // Step 3: remove trailing dash if it cut in the middle
+  newSlug = newSlug.replace(/-+$/, "");
+
+  // Prevent infinite loop
   if (currentSlug === newSlug) {
     return res.json({ message: "Slug already up to date" });
   }
 
   try {
-    await databases.updateDocument($databaseId, $collectionId, $id, { slug: newSlug });
+    await databases.updateDocument($databaseId, $collectionId, $id, {
+      slug: newSlug
+    });
     return res.json({ success: true, slug: newSlug });
   } catch (err) {
     error("Failed to update document: " + err.message);

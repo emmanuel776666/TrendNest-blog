@@ -23,7 +23,7 @@ export default async ({ req, res, log, error }) => {
       .replace(/[^\w\s-]/g, "")
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-")
-      .substring(0, 10)
+      .substring(0, 30)
       .replace(/-+$/, "");
 
     const client = new Client()

@@ -1,45 +1,35 @@
-import { Client, Databases } from "node-appwrite";
-
 export default async ({ req, res, log, error }) => {
-  const client = new Client()
-    .setEndpoint(process.env.APPWRITE_ENDPOINT)
-    .setProject(process.env.APPWRITE_PROJECT_ID)
-    .setKey(req.headers['x-appwrite-key'] || process.env.APPWRITE_API_KEY);
+  let payload = req.body || {};
 
-  const databases = new Databases(client);
-
-  let document = req.body;
-  if (typeof document === "string") document = JSON.parse(document);
-
-  const { $databaseId, $collectionId, $id, title, slug: currentSlug } = document;
-
-  if (!title) {
-    return res.json({ message: "Slug not generated: title missing" });
+  // Appwrite automatic trigger sends event data inside "payload"
+  if (payload.event) {
+    payload = payload.event.payload; 
   }
 
-  // Step 1: clean the title
+  const { $databaseId, $collectionId, $id, title, slug: currentSlug } = payload;
+
+  if (!title) return res.json({ message: "Slug missing" });
+
   let newSlug = title
     .toLowerCase()
     .trim()
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+    .replace(/-+/g, "-")
+    .substring(0, 10)
+    .replace(/-+$/, "");
 
-  // Step 2: limit to 10 characters
-  newSlug = newSlug.substring(0, 30);
+  if (currentSlug === newSlug) return res.json({ message: "Slug already up to date" });
 
-  // Step 3: remove trailing dash if it cut in the middle
-  newSlug = newSlug.replace(/-+$/, "");
+  const client = new Client()
+    .setEndpoint(process.env.APPWRITE_ENDPOINT)
+    .setProject(process.env.APPWRITE_PROJECT_ID)
+    .setKey(process.env.APPWRITE_API_KEY);
 
-  // Prevent infinite loop
-  if (currentSlug === newSlug) {
-    return res.json({ message: "Slug already up to date" });
-  }
+  const databases = new Databases(client);
 
   try {
-    await databases.updateDocument($databaseId, $collectionId, $id, {
-      slug: newSlug
-    });
+    await databases.updateDocument($databaseId, $collectionId, $id, { slug: newSlug });
     return res.json({ success: true, slug: newSlug });
   } catch (err) {
     error("Failed to update document: " + err.message);

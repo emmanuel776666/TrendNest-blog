@@ -1,21 +1,23 @@
-import { Client, Databases } from "node-appwrite"; // ✅ MUST be at top
+import { Client, Databases } from "node-appwrite";
 
 export default async ({ req, res, log, error }) => {
   try {
+    // Default payload (manual execution)
     let payload = req.body || {};
 
-    // If triggered automatically, Appwrite sends data inside event.payload
-    if (payload.event) {
+    // Automatic triggers send event.payload
+    if (payload.event && payload.event.payload) {
       payload = payload.event.payload;
     }
 
-    const { $databaseId, $collectionId, $id, title, slug: currentSlug } = payload;
+    const { $databaseId, $collectionId, $id, title } = payload;
 
+    // Validate
     if (!title || !$databaseId || !$collectionId || !$id) {
       return res.json({ message: "Missing required fields" });
     }
 
-    // Generate slug (max 10 chars)
+    // Generate slug
     let newSlug = title
       .toLowerCase()
       .trim()
@@ -25,12 +27,6 @@ export default async ({ req, res, log, error }) => {
       .substring(0, 10)
       .replace(/-+$/, "");
 
-    // Prevent infinite loop
-    if (currentSlug === newSlug) {
-      return res.json({ message: "Slug already up to date" });
-    }
-
-    // Initialize Appwrite client
     const client = new Client()
       .setEndpoint(process.env.APPWRITE_ENDPOINT)
       .setProject(process.env.APPWRITE_PROJECT_ID)
@@ -38,6 +34,7 @@ export default async ({ req, res, log, error }) => {
 
     const databases = new Databases(client);
 
+    // Update the document directly
     await databases.updateDocument($databaseId, $collectionId, $id, { slug: newSlug });
 
     return res.json({ success: true, slug: newSlug });

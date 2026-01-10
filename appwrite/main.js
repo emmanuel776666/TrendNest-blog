@@ -1,7 +1,6 @@
 import { Client, Databases } from "node-appwrite";
 
 export default async ({ req, res, log, error }) => {
-  log("Function triggered!");
   log("Function triggered!", payload);
 
 

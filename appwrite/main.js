@@ -8,8 +8,6 @@ export default async ({ req, res, log, error }) => {
       payload = payload.event.payload;
     }
 
-    log("Function triggered!", payload); // Optional: keep for debugging
-
     const { $databaseId, $tableId, $id, title, slug: currentSlug } = payload;
 
     if (!title || !$databaseId || !$tableId || !$id) {

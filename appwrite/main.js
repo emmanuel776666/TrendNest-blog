@@ -13,6 +13,11 @@ export default async ({ req, res, log, error }) => {
     if (!title || !$databaseId || !$tableId || !$id) {
       return res.json({ message: "Missing required fields in payload" });
     }
+    // If slug already exists, DO NOT change it
+    if (currentSlug && currentSlug.length > 0) {
+   return res.json({ message: "Slug already exists. Skipping update." });
+}
+
 
     // Generate slug (max 10 chars)
     let newSlug = title

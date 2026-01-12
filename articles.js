@@ -136,12 +136,10 @@ if (!localStorage.getItem('cookieAccepted')) {
 const { Query } = Appwrite;
 
 function getSlugFromURL() {
-    const path = window.location.pathname;
-    const parts = path.split("/").filter(Boolean);
-
-    // URL: /articles.html/how-to-ai-to-make-money
-    return parts.length > 1 ? parts[parts.length - 1] : null;
+    const params = new URLSearchParams(window.location.search);
+    return params.get("slug");   // reads ?slug=your-slug
 }
+
 
 async function loadPostBySlug() {
     try {

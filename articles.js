@@ -66,8 +66,9 @@ const peopleAlsoSearchItems = combinedList.slice(0, 5);
 const relatedBlockItems = combinedList.slice(5, 15);
 // Render People Also Search
 document.querySelector(".search-tags").innerHTML = peopleAlsoSearchItems
-  .map(item => <a href="${item.link}"><span>${item.title}</span></a>)
+  .map(item => `<a href="${item.link}"><span>${item.title}</span></a>`)
   .join("");
+
 // Render Related Blocks
 document.querySelector(".related-blocks").innerHTML = relatedBlockItems
   .map(item => `
@@ -82,15 +83,16 @@ document.querySelector(".related-blocks").innerHTML = relatedBlockItems
 // Function to get images for People Also Search items
 function getImageForPeopleAlsoSearch(link) {
   const map = {
-    "blog1.html": "https://i.ibb.co/ksThg24J/file-0000000040c461f488a9759c8e9a7c07.webp", loading: "lazy",
-    "blog2.html": "https://i.ibb.co/DfsqsJLc/IMG-20250809-WA0003.webp", loading: "lazy",
+    "blog1.html": "https://i.ibb.co/ksThg24J/file-0000000040c461f488a9759c8e9a7c07.webp",
+    "blog2.html": "https://i.ibb.co/DfsqsJLc/IMG-20250809-WA0003.webp",
     "blog3.html": "https://i.ibb.co/cSsQgNPT/file-0000000055f461fd924f8f59a9fe18c0.webp",
-    "blog4.html": "https://i.ibb.co/fGFc0M7Q/file-000000003ee46246a2d11a7e3e6cd750.webp", loading: "lazy",
-    "blog5.html": "https://i.ibb.co/MmKC03r/IMG-20250809-WA0017-1.webp", loading: "lazy",
-    "index.html": "https://i.ibb.co/Gf5c6hxp/IMG-20250809-WA0081.webp", loading: "lazy"
+    "blog4.html": "https://i.ibb.co/fGFc0M7Q/file-000000003ee46246a2d11a7e3e6cd750.webp",
+    "blog5.html": "https://i.ibb.co/MmKC03r/IMG-20250809-WA0017-1.webp",
+    "index.html": "https://i.ibb.co/Gf5c6hxp/IMG-20250809-WA0081.webp"
   };
   return map[link] || "";
 }
+
 // this part is the code that protect my page from right click and others
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault();

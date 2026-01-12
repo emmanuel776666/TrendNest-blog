@@ -175,7 +175,7 @@ async function loadPostBySlug() {
         document.getElementById("post-body").innerHTML = marked.parse(post.content || "");
 
         // Canonical URL
-        const fullURL = `https://www.trend-nest-latest-blog.name.ng/articles.html/${post.slug}`;
+        const fullURL = `https://www.trend-nest-latest-blog.name.ng/articles.html?slug=${post.slug}`;
         document.getElementById("canonical-link").setAttribute("href", fullURL);
 
         // SEO

@@ -44,7 +44,7 @@ app.get("/articles.html", async (req, res) => {
 <head>
   <title>${post.title} | TrendNest</title>
 
-  <meta property="og:title" content="${post.title}">
+  <meta property="og:title" content="${post.subheading}">
   <meta property="og:description" content="${post.description || ""}">
   <meta property="og:image" content="${post.image}">
   <meta property="og:url" content="${pageURL}">
@@ -52,11 +52,10 @@ app.get("/articles.html", async (req, res) => {
   <meta property="og:site_name" content="TrendNest">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${post.title}">
+  <meta name="twitter:title" content="${post.subheading}">
   <meta name="twitter:image" content="${post.image}">
 </head>
 <body>
-  <h1>${post.title}</h1>
 
   <script>
     if (!/facebookexternalhit|twitterbot|whatsapp|linkedinbot/i.test(navigator.userAgent)) {
@@ -73,3 +72,4 @@ app.get("/articles.html", async (req, res) => {
 });
 
 app.listen(PORT, () => console.log("OG server running on port", PORT));
+

@@ -195,15 +195,6 @@ function updateSEO(post, url) {
     document.getElementById("meta-description").setAttribute("content", post.description || "");
     document.getElementById("meta-keywords").setAttribute("content", post.keyword || "");
 
-    // Open Graph
-    document.getElementById("og-title").setAttribute("content", post.title);
-    document.getElementById("og-description").setAttribute("content", post.description || "");
-    document.getElementById("og-image").setAttribute("content", post.image);
-    document.getElementById("og-url").setAttribute("content", url);
-
-    // Twitter
-    document.getElementById("twitter-title").setAttribute("content", post.title);
-    document.getElementById("twitter-image").setAttribute("content", post.image);
 }
 
 function injectSchema(post, url) {

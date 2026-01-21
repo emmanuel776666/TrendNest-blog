@@ -481,3 +481,56 @@ padding: 15px 70px;
   font-size: 18px;
   margin-bottom: 8px;
 }
+/* 👇 Follow us row under publish date */
+.follow-social-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 👈 THIS pushes icons to the right */
+  margin: 8px 0 15px 0;
+  font-size: 16px;
+}
+
+.follow-text {
+  color: #444;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.follow-social-icons {
+  display: flex;
+  gap: 8px;
+}
+
+.follow-social-icons a {
+  width: 34px;
+  height: 33px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
+}
+
+/* Brand colors */
+.follow-social-icons a.fa-facebook-f { background: #3b5998; }
+.follow-social-icons a.fa-whatsapp   { background: #25D366; }
+
+.follow-social-icons a:hover {
+  filter: brightness(1.1);
+}
+/* Perfect X icon (SVG) */
+.x-icon-svg {
+  width: 33px;
+  height: 33px;
+  background: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.x-icon-svg svg {
+  width: 19px;
+  height: 19px;
+}

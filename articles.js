@@ -166,8 +166,19 @@ async function loadPostBySlug() {
         const post = response.documents[0];
 
         // Format date
-        const date = new Date(post.$createdAt).toDateString();
-        document.getElementById("publish-date").innerText = "Published " + date;
+     const createdAt = new Date(post.$createdAt);
+
+const formattedDate = createdAt.toLocaleString(undefined, {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
+document.getElementById("publish-date").innerText =
+  "Published " + formattedDate;
+
 
         // Content
         document.getElementById("post-title").innerText = post.subheading;

@@ -11,8 +11,18 @@ app.get("/robots.txt", (req, res) => {
   res.send(`
 User-agent: *
 Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
 `);
 });
+
 
 
 app.get("/articles.html", async (req, res) => {
@@ -46,6 +56,9 @@ app.get("/articles.html", async (req, res) => {
     if (!post) return res.status(404).send("Post not found");
 
     const pageURL = `${process.env.BASE_URL}/articles.html?slug=${slug}`;
+    res.setHeader("Cache-Control", "public, max-age=600");
+res.status(200);
+
 
     res.send(`
 <!DOCTYPE html>
@@ -67,7 +80,8 @@ app.get("/articles.html", async (req, res) => {
 <body>
 
   <script>
-    if (!/facebookexternalhit|twitterbot|whatsapp|linkedinbot/i.test(navigator.userAgent)) {
+    if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedinbot/i
+.test(navigator.userAgent)) {
       window.location.href = "${process.env.SPA_URL}/articles.html?slug=${slug}";
     }
   </script>
@@ -81,6 +95,7 @@ app.get("/articles.html", async (req, res) => {
 });
 
 app.listen(PORT, () => console.log("OG server running on port", PORT));
+
 
 
 

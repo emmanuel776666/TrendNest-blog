@@ -1,3 +1,11 @@
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  res.send(`
+User-agent: *
+Allow: /
+`);
+});
+
 import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
@@ -72,6 +80,7 @@ app.get("/articles.html", async (req, res) => {
 });
 
 app.listen(PORT, () => console.log("OG server running on port", PORT));
+
 
 
 

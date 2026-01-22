@@ -501,24 +501,7 @@ padding: 15px 70px;
   gap: 8px;
 }
 
-.follow-social-icons a {
-  width: 34px;
-  height: 33px;
-  line-height: 30px;
-  text-align: center;
-  border-radius: 50%;
-  font-size: 20px;
-  color: white;
-  text-decoration: none;
-}
 
-/* Brand colors */
-.follow-social-icons a.fa-facebook-f { background: #3b5998; }
-.follow-social-icons a.fa-whatsapp   { background: #25D366; }
-
-.follow-social-icons a:hover {
-  filter: brightness(1.1);
-}
 /* Perfect X icon (SVG) */
 .x-icon-svg {
   width: 33px;
@@ -534,3 +517,31 @@ padding: 15px 70px;
   width: 19px;
   height: 19px;
 }
+.svg-icon {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Brand colors */
+.svg-icon.whatsapp {
+  background: #25D366;
+}
+
+.svg-icon.facebook {
+  background: #3b5998;
+}
+
+/* Hover */
+.svg-icon:hover,
+.x-icon-svg:hover {
+  filter: brightness(1.1);
+  }

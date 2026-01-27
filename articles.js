@@ -56,7 +56,7 @@ async function loadRelatedPosts(currentPost) {
 
     // 5️⃣ Render
     relatedContainer.innerHTML = finalPosts.map(post => `
-      <a href="https://www.trend-nest-latest-blog.name.ng/articles.html?slug=${post.slug}">
+      <a href="articles.html?slug=${post.slug}">
         <div class="related-item">
           <img src="${post.image}" alt="${post.subheading}" loading="lazy">
           <p>${post.subheading}</p>

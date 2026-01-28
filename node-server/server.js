@@ -55,7 +55,7 @@ app.get("/sitemap.xml", async (req, res) => {
   }
 
   try {
-    const baseURL = "https://og.trend-nest-latest-blog.name.ng"; // your site URL
+    const baseURL = "https://www.trend-nest-latest-blog.name.ng"; // your site URL
     const allPosts = [];
     let lastId = null;
     let hasMore = true;
@@ -205,6 +205,7 @@ res.status(200);
 app.listen(PORT, () => console.log("OG server running on port", PORT));
 const server = app.listen(3000);
 server.timeout = 120000; // Sets timeout to 2 minutes
+
 
 
 

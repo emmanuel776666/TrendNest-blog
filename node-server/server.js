@@ -24,6 +24,18 @@ Allow: /
 });
 
 
+import express from "express";
+import fetch from "node-fetch"; // or built-in fetch if using Node 18+
+const app = express();
+
+// ------------------------
+// Global cache variables
+let cachedSitemap = null;
+let lastCacheTime = 0;
+const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+
+// ------------------------
+// Robots.txt
 app.get("/robots.txt", (req, res) => {
   res.type("text/plain");
   res.send(`
@@ -34,17 +46,19 @@ Sitemap: https://og.trend-nest-latest-blog.name.ng/sitemap.xml
   `);
 });
 
-
+// ------------------------
+// Sitemap.xml
 app.get("/sitemap.xml", async (req, res) => {
   const now = Date.now();
-  const CACHE_DURATION = 3600000; // 1 hour
+
+  // Serve cached sitemap if fresh
   if (cachedSitemap && (now - lastCacheTime < CACHE_DURATION)) {
     res.header("Content-Type", "application/xml");
     return res.send(cachedSitemap);
   }
 
   try {
-    const baseURL = "https://og.trend-nest-latest-blog.name.ng"; // change to www if needed
+    const baseURL = "https://og.trend-nest-latest-blog.name.ng"; // your site URL
     const allPosts = [];
     let lastId = null;
     let hasMore = true;
@@ -53,16 +67,15 @@ app.get("/sitemap.xml", async (req, res) => {
       let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(100)`;
       if (lastId) queryUrl += `&queries[]=cursorAfter("${lastId}")`;
 
+      console.log("Fetching posts from Appwrite...");
+      console.log("API URL:", queryUrl);
+
       const response = await fetch(queryUrl, {
         headers: {
           "X-Appwrite-Project": process.env.APPWRITE_PROJECT_ID,
           "X-Appwrite-Key": process.env.APPWRITE_API_KEY
         }
       });
-
-      console.log("Fetching posts from Appwrite...");
-console.log("API URL:", queryUrl);
-
 
       const data = await response.json();
       const documents = data.documents || [];
@@ -100,8 +113,10 @@ console.log("API URL:", queryUrl);
   ${urls}
 </urlset>`;
 
+    // Update cache
     cachedSitemap = sitemap;
     lastCacheTime = now;
+
     res.header("Content-Type", "application/xml");
     res.send(sitemap);
 
@@ -114,6 +129,7 @@ console.log("API URL:", queryUrl);
     res.status(500).send("Error generating sitemap");
   }
 });
+
 
 
 
@@ -192,6 +208,7 @@ res.status(200);
 app.listen(PORT, () => console.log("OG server running on port", PORT));
 const server = app.listen(3000);
 server.timeout = 120000; // Sets timeout to 2 minutes
+
 
 
 

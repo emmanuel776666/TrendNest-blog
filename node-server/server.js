@@ -35,33 +35,23 @@ Sitemap: https://og.trend-nest-latest-blog.name.ng/sitemap.xml
 });
 
 
-// Store the sitemap in memory to avoid hitting Appwrite every time a bot visits
-let cachedSitemap = null;
-let lastCacheTime = 0;
-const CACHE_DURATION = 3600000; // 1 hour in milliseconds
-
 app.get("/sitemap.xml", async (req, res) => {
   const now = Date.now();
-
-  // If we have a fresh sitemap in cache, serve it immediately
+  const CACHE_DURATION = 3600000; // 1 hour
   if (cachedSitemap && (now - lastCacheTime < CACHE_DURATION)) {
     res.header("Content-Type", "application/xml");
     return res.send(cachedSitemap);
   }
 
   try {
-    let allPosts = [];
+    const baseURL = "https://og.trend-nest-latest-blog.name.ng"; // change to www if needed
+    const allPosts = [];
     let lastId = null;
     let hasMore = true;
-    const baseURL = "https://www.trend-nest-latest-blog.name.ng";
-    const apiBaseUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents`;
 
-    // 1. Fetch ALL posts using Cursor Pagination (Fixes the 100 limit)
     while (hasMore) {
-      let queryUrl = `${apiBaseUrl}?queries[]=limit(100)`;
-      if (lastId) {
-        queryUrl += `&queries[]=cursorAfter("${lastId}")`;
-      }
+      let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(100)`;
+      if (lastId) queryUrl += `&queries[]=cursorAfter("${lastId}")`;
 
       const response = await fetch(queryUrl, {
         headers: {
@@ -72,7 +62,7 @@ app.get("/sitemap.xml", async (req, res) => {
 
       const data = await response.json();
       const documents = data.documents || [];
-      allPosts = [...allPosts, ...documents];
+      allPosts.push(...documents);
 
       if (documents.length === 100) {
         lastId = documents[documents.length - 1].$id;
@@ -81,21 +71,21 @@ app.get("/sitemap.xml", async (req, res) => {
       }
     }
 
-    // 2. Map posts to XML format
+    // Generate URLs for each post
     const urls = allPosts.map(post => `
   <url>
     <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`).join("");
 
+    // Latest homepage update
     const latestUpdate = allPosts.length
       ? new Date(Math.max(...allPosts.map(p => new Date(p.$updatedAt || p.$createdAt)))).toISOString()
       : new Date().toISOString();
 
-    // 3. Build the full Sitemap XML
-   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${baseURL}</loc>
@@ -106,17 +96,13 @@ app.get("/sitemap.xml", async (req, res) => {
   ${urls}
 </urlset>`;
 
-
-    // 4. Update the cache and send response
     cachedSitemap = sitemap;
     lastCacheTime = now;
-
     res.header("Content-Type", "application/xml");
     res.send(sitemap);
 
   } catch (err) {
     console.error("Sitemap error:", err);
-    // If there's an error but we have an old cache, send the old one rather than failing
     if (cachedSitemap) {
       res.header("Content-Type", "application/xml");
       return res.send(cachedSitemap);
@@ -124,6 +110,7 @@ app.get("/sitemap.xml", async (req, res) => {
     res.status(500).send("Error generating sitemap");
   }
 });
+
 
 
 
@@ -201,6 +188,7 @@ res.status(200);
 app.listen(PORT, () => console.log("OG server running on port", PORT));
 const server = app.listen(3000);
 server.timeout = 120000; // Sets timeout to 2 minutes
+
 
 
 

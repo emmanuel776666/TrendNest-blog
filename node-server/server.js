@@ -30,7 +30,7 @@ app.get("/robots.txt", (req, res) => {
 User-agent: *
 Allow: /
 
-Sitemap: https://www.trend-nest-latest-blog.name.ng/sitemap.xml
+Sitemap: https://og.trend-nest-latest-blog.name.ng/sitemap.xml
   `);
 });
 
@@ -201,6 +201,7 @@ res.status(200);
 app.listen(PORT, () => console.log("OG server running on port", PORT));
 const server = app.listen(3000);
 server.timeout = 120000; // Sets timeout to 2 minutes
+
 
 
 

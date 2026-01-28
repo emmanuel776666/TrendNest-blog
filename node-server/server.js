@@ -26,13 +26,19 @@ Allow: /
 
 
 
+let cachedSitemap = null;
+let lastCacheTime = 0;
+
 app.get("/sitemap.xml", async (req, res) => {
+  // Cache for 1 hour (3600000 ms) to save Appwrite credits/load
+  if (cachedSitemap && (Date.now() - lastCacheTime < 3600000)) {
+    res.header("Content-Type", "application/xml");
+    return res.send(cachedSitemap);
+  }
+
   try {
-    const url =
-      `${process.env.APPWRITE_ENDPOINT}` +
-      `/databases/${process.env.APPWRITE_DATABASE_ID}` +
-      `/collections/${process.env.APPWRITE_COLLECTION_ID}` +
-      `/documents`;
+    // FIX: Added limit query to get more than 25 documents
+    const url = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(40000)`;
 
     const response = await fetch(url, {
       headers: {
@@ -43,44 +49,36 @@ app.get("/sitemap.xml", async (req, res) => {
 
     const data = await response.json();
     const posts = data.documents || [];
-
     const baseURL = "https://www.trend-nest-latest-blog.name.ng";
 
     const urls = posts.map(post => `
-      <url>
-        <loc>${baseURL}/articles.html?slug=${post.slug}</loc>
-        <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-      </url>
-    `).join("");
+  <url>
+    <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
+    <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`).join("");
 
-   const latestUpdate = posts.length
-  ? new Date(
-      Math.max(...posts.map(p => new Date(p.$updatedAt || p.$createdAt)))
-    ).toISOString()
-  : new Date().toISOString();
-
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${baseURL}</loc>
-    <lastmod>${latestUpdate}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   ${urls}
 </urlset>`;
 
+    cachedSitemap = sitemap;
+    lastCacheTime = Date.now();
 
     res.header("Content-Type", "application/xml");
     res.send(sitemap);
-
   } catch (err) {
-    console.error("Sitemap error:", err);
-    res.status(500).send("Error generating sitemap");
+    res.status(500).send("Error");
   }
 });
+
 
 
 
@@ -155,6 +153,7 @@ res.status(200);
 });
 
 app.listen(PORT, () => console.log("OG server running on port", PORT));
+
 
 
 

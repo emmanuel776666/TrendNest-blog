@@ -95,8 +95,8 @@ app.get("/sitemap.xml", async (req, res) => {
       : new Date().toISOString();
 
     // 3. Build the full Sitemap XML
-    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org">
+   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${baseURL}</loc>
     <lastmod>${latestUpdate}</lastmod>
@@ -105,6 +105,7 @@ app.get("/sitemap.xml", async (req, res) => {
   </url>
   ${urls}
 </urlset>`;
+
 
     // 4. Update the cache and send response
     cachedSitemap = sitemap;
@@ -200,6 +201,7 @@ res.status(200);
 app.listen(PORT, () => console.log("OG server running on port", PORT));
 const server = app.listen(3000);
 server.timeout = 120000; // Sets timeout to 2 minutes
+
 
 
 

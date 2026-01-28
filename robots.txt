@@ -4,5 +4,6 @@ Allow: /
 Sitemap: https://www.trend-nest-latest-blog.name.ng
 Sitemap: https://www.trend-nest-latest-blog.name.ng/sitemap.xml
 Sitemap: https://www.trend-nest-latest-blog.name.ng/sitemap-remakelebu.xml
+Sitemap: https://og.trend-nest-latest-blog.name.ng/sitemap.xml
 
 

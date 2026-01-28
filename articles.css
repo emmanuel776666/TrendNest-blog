@@ -303,7 +303,7 @@ ins.adsbygoogle iframe {
   font-size: 20px;
 }
 
-/* 🟨 People Also Search */
+/* 🟨 Related content*/
 .search-heading {
   font-size: 22px;
   text-align: center;
@@ -312,20 +312,7 @@ ins.adsbygoogle iframe {
   font-family: Georgia, serif;
 }
 
-/* 🟩 Search Tags Row */
-.search-tags {
-  text-align: center;
-  margin: 10px 0;
-}
-.search-tags span {
-  display: inline-block;
-  background-color: #f0f0f0;
-  color: #333;
-  padding: 5px 12px;
-  margin: 5px;
-  border-radius: 16px;
-  font-size: 14px;
-}
+
 
 /* 🟥 Related Content Blocks */
 .related-blocks {

@@ -88,7 +88,7 @@ app.get("/sitemap.xml", async (req, res) => {
     // Generate URLs for each post
     const urls = allPosts.map(post => `
   <url>
-    <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
+    <loc>${baseURL}/articles.html?slug=${encodeURIComponent(slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -205,6 +205,7 @@ res.status(200);
 app.listen(PORT, () => console.log("OG server running on port", PORT));
 const server = app.listen(3000);
 server.timeout = 120000; // Sets timeout to 2 minutes
+
 
 
 

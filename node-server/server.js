@@ -63,7 +63,8 @@ app.get("/sitemap.xml", async (req, res) => {
     while (hasMore) {
       let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(100)`;
       if (lastId) queryUrl += `&queries[]=cursorAfter("${lastId}")`;
-
+      
+      console.log("All slugs fetched from Appwrite:", allPosts.map(p => p.slug));
       console.log("Fetching posts from Appwrite...");
       console.log("API URL:", queryUrl);
 
@@ -88,7 +89,7 @@ app.get("/sitemap.xml", async (req, res) => {
     // Generate URLs for each post
     const urls = allPosts.map(post => `
   <url>
-    <loc>${baseURL}/articles.html?slug=${encodeURIComponent(slug)}</loc>
+    <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -205,6 +206,7 @@ res.status(200);
 app.listen(PORT, () => console.log("OG server running on port", PORT));
 const server = app.listen(3000);
 server.timeout = 120000; // Sets timeout to 2 minutes
+
 
 
 

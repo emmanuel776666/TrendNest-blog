@@ -25,6 +25,66 @@ Allow: /
 
 
 
+
+app.get("/sitemap.xml", async (req, res) => {
+  try {
+    const url =
+      `${process.env.APPWRITE_ENDPOINT}` +
+      `/databases/${process.env.APPWRITE_DATABASE_ID}` +
+      `/collections/${process.env.APPWRITE_COLLECTION_ID}` +
+      `/documents`;
+
+    const response = await fetch(url, {
+      headers: {
+        "X-Appwrite-Project": process.env.APPWRITE_PROJECT_ID,
+        "X-Appwrite-Key": process.env.APPWRITE_API_KEY
+      }
+    });
+
+    const data = await response.json();
+    const posts = data.documents || [];
+
+    const baseURL = "https://www.trend-nest-latest-blog.name.ng";
+
+    const urls = posts.map(post => `
+      <url>
+        <loc>${baseURL}/articles.html?slug=${post.slug}</loc>
+        <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+      </url>
+    `).join("");
+
+   const latestUpdate = posts.length
+  ? new Date(
+      Math.max(...posts.map(p => new Date(p.$updatedAt || p.$createdAt)))
+    ).toISOString()
+  : new Date().toISOString();
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseURL}</loc>
+    <lastmod>${latestUpdate}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  ${urls}
+</urlset>`;
+
+
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap);
+
+  } catch (err) {
+    console.error("Sitemap error:", err);
+    res.status(500).send("Error generating sitemap");
+  }
+});
+
+
+
+
 app.get("/articles.html", async (req, res) => {
   const slug = req.query.slug;
   if (!slug) return res.status(400).send("No slug");
@@ -95,6 +155,7 @@ res.status(200);
 });
 
 app.listen(PORT, () => console.log("OG server running on port", PORT));
+
 
 
 

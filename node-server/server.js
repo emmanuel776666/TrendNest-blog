@@ -24,6 +24,115 @@ Allow: /
 
 
 
+
+// Global cache variables
+let cachedSitemap = null;
+let lastCacheTime = 0;
+const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+
+// ------------------------
+// Robots.txt
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  res.send(`
+User-agent: *
+Allow: /
+
+Sitemap: https://og.trend-nest-latest-blog.name.ng/sitemap.xml
+  `);
+});
+
+// ------------------------
+// Sitemap.xml
+app.get("/sitemap.xml", async (req, res) => {
+  const now = Date.now();
+
+  // Serve cached sitemap if fresh
+  if (cachedSitemap && (now - lastCacheTime < CACHE_DURATION)) {
+    res.header("Content-Type", "application/xml");
+    return res.send(cachedSitemap);
+  }
+
+  try {
+    const baseURL = "https://www.trend-nest-latest-blog.name.ng"; // your site URL
+    const allPosts = [];
+    let lastId = null;
+    let hasMore = true;
+
+    while (hasMore) {
+      let queryUrl = ${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(100);
+      if (lastId) queryUrl += &queries[]=cursorAfter("${lastId}");
+      
+      console.log("All slugs fetched from Appwrite:", allPosts.map(p => p.slug));
+      console.log("Fetching posts from Appwrite...");
+      console.log("API URL:", queryUrl);
+
+      const response = await fetch(queryUrl, {
+        headers: {
+          "X-Appwrite-Project": process.env.APPWRITE_PROJECT_ID,
+          "X-Appwrite-Key": process.env.APPWRITE_API_KEY
+        }
+      });
+
+      const data = await response.json();
+      const documents = data.documents || [];
+      allPosts.push(...documents);
+
+      if (documents.length === 100) {
+        lastId = documents[documents.length - 1].$id;
+      } else {
+        hasMore = false;
+      }
+    }
+
+    // Generate URLs for each post
+    const urls = allPosts.map(post => `
+  <url>
+    <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
+    <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>`).join("");
+
+    // Latest homepage update
+    const latestUpdate = allPosts.length
+      ? new Date(Math.max(...allPosts.map(p => new Date(p.$updatedAt || p.$createdAt)))).toISOString()
+      : new Date().toISOString();
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseURL}</loc>
+    <lastmod>${latestUpdate}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  ${urls}
+</urlset>`;
+
+    // Update cache
+    cachedSitemap = sitemap;
+    lastCacheTime = now;
+
+    res.header("Content-Type", "application/xml");
+    res.send(sitemap);
+
+  } catch (err) {
+    console.error("Sitemap error:", err);
+    if (cachedSitemap) {
+      res.header("Content-Type", "application/xml");
+      return res.send(cachedSitemap);
+    }
+    res.status(500).send("Error generating sitemap");
+  }
+});
+
+
+
+
+
+
+
 app.get("/articles.html", async (req, res) => {
   const slug = req.query.slug;
   if (!slug) return res.status(400).send("No slug");
@@ -94,3 +203,4 @@ res.status(200);
 });
 
 app.listen(PORT, () => console.log("OG server running on port", PORT));
+server.timeout = 120000; // Sets timeout to 2 minutes

@@ -39,7 +39,7 @@ app.get("/robots.txt", (req, res) => {
 User-agent: *
 Allow: /
 
-Sitemap: https://og.trend-nest-latest-blog.name.ng/sitemap.xml
+Sitemap: https://www.trend-nest-latest-blog.name.ng/sitemap.xml
   `);
 });
 

@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+/* ---------------- ROBOTS ---------------- */
 app.get("/robots.txt", (req, res) => {
   res.type("text/plain");
   res.send(`
@@ -22,8 +24,7 @@ Allow: /
 `);
 });
 
-
-
+/* ---------------- OG PAGE ---------------- */
 app.get("/articles.html", async (req, res) => {
   const slug = req.query.slug;
   if (!slug) return res.status(400).send("No slug");
@@ -35,11 +36,8 @@ app.get("/articles.html", async (req, res) => {
       values: [slug]
     });
 
-    const url =
-      ${process.env.APPWRITE_ENDPOINT} +
-      /databases/${process.env.APPWRITE_DATABASE_ID} +
-      /collections/${process.env.APPWRITE_COLLECTION_ID} +
-      /documents?queries[]=${encodeURIComponent(query)};
+    // ✅ FIXED TEMPLATE STRING
+    const url = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=${encodeURIComponent(query)}`;
 
     const response = await fetch(url, {
       headers: {
@@ -49,15 +47,15 @@ app.get("/articles.html", async (req, res) => {
     });
 
     const data = await response.json();
-    console.log("Appwrite:", JSON.stringify(data, null, 2));
+    console.log("Appwrite response:", data);
 
     const post = data.documents?.[0];
     if (!post) return res.status(404).send("Post not found");
 
-    const pageURL = ${process.env.BASE_URL}/articles.html?slug=${slug};
-    res.setHeader("Cache-Control", "public, max-age=600");
-res.status(200);
+    // ✅ FIXED TEMPLATE STRING
+    const pageURL = `${process.env.BASE_URL}/articles.html?slug=${slug}`;
 
+    res.setHeader("Cache-Control", "public, max-age=600");
 
     res.send(`
 <!DOCTYPE html>
@@ -78,20 +76,19 @@ res.status(200);
 </head>
 <body>
 
-  <script>
-    if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedinbot/i
-.test(navigator.userAgent)) {
-      window.location.href = "${process.env.SPA_URL}/articles.html?slug=${slug}";
-    }
-  </script>
+<script>
+if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedinbot/i.test(navigator.userAgent)) {
+  window.location.href = "${process.env.SPA_URL}/articles.html?slug=${slug}";
+}
+</script>
+
 </body>
 </html>
 `);
   } catch (err) {
-    console.error(err);
+    console.error("Server error:", err);
     res.status(500).send("Server error");
   }
 });
 
 app.listen(PORT, () => console.log("OG server running on port", PORT));
-

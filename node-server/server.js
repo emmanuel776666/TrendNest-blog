@@ -22,7 +22,7 @@ app.get("/robots.txt", (req, res) => {
 User-agent: *
 Allow: /
 
-Sitemap: ${process.env.BASE_URL}/sitemap.xml
+Sitemap: ${process.env.BASE_URL.trim()}/sitemap.xml
 `);
 });
 
@@ -164,6 +164,7 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 
 
 

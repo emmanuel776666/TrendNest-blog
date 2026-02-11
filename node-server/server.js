@@ -38,7 +38,7 @@ app.get("/sitemap.xml", async (req, res) => {
   }
 
   try {
-    const baseURL = process.env.BASE_URL;
+    const baseURL = process.env.BASE_URL.trim();
 const query = JSON.stringify({
   method: "limit",
   values: [100]
@@ -164,6 +164,7 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 
 
 

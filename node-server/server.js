@@ -32,7 +32,6 @@ Sitemap: ${process.env.BASE_URL.trim()}/sitemap.xml
 app.get("/sitemap.xml", async (req, res) => {
   const now = Date.now();
 
-  // Serve cached sitemap if still fresh
   if (cachedSitemap && now - lastCacheTime < CACHE_DURATION) {
     res.header("Content-Type", "application/xml");
     return res.send(cachedSitemap);
@@ -45,10 +44,11 @@ app.get("/sitemap.xml", async (req, res) => {
     let hasMore = true;
 
     while (hasMore) {
-      // Limit to 100 per request
-      let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(100)`;
+      // ✅ Correct JSON query
+      const query = JSON.stringify({ method: "limit", values: [100] });
+      let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=${encodeURIComponent(query)}`;
 
-      // Pagination cursor
+      // Pagination
       if (lastId) queryUrl += `&queries[]=cursorAfter("${lastId}")`;
 
       console.log("Fetching posts from Appwrite:", queryUrl);
@@ -66,27 +66,23 @@ app.get("/sitemap.xml", async (req, res) => {
       allPosts.push(...documents);
 
       if (documents.length === 100) {
-        // There are more posts to fetch
         lastId = documents[documents.length - 1].$id;
       } else {
         hasMore = false;
       }
     }
 
-    // Filter out posts without a slug
+    // Filter out posts without slug
     const filteredPosts = allPosts.filter(post => post.slug);
 
     console.log("Total posts fetched:", allPosts.length);
     console.log("Posts with slugs:", filteredPosts.length);
 
-    // Generate sitemap URLs
     const urls = filteredPosts.map(post => `
   <url>
     <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
   </url>`).join("");
-
-    if (!urls) console.log("No article URLs generated.");
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -178,6 +174,7 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 
 
 

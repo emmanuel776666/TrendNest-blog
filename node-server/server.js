@@ -70,6 +70,8 @@ app.get("/sitemap.xml", async (req, res) => {
     }
 
     console.log("Fetched posts:", allPosts.length);
+     console.log("All documents:", JSON.stringify(allPosts, null, 2));
+
 
     // 🔥 IMPORTANT: only article URLs, no homepage
     const urls = allPosts
@@ -175,5 +177,6 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 
 

@@ -14,7 +14,7 @@ let lastCacheTime = 0;
 const CACHE_DURATION = 3600000; // 1 hour
 
 /* ===============================
-   ROBOTS
+   ROBOT
 ================================ */
 app.get("/robots.txt", (req, res) => {
   res.type("text/plain");
@@ -189,3 +189,4 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+

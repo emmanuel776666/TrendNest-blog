@@ -27,52 +27,66 @@ Sitemap: ${process.env.BASE_URL.trim()}/sitemap.xml
 });
 
 /* ===============================
-   SITEMAP
+   SITEMAP WITH PAGINATION & FILTER
 ================================ */
 app.get("/sitemap.xml", async (req, res) => {
   const now = Date.now();
 
-  if (cachedSitemap && (now - lastCacheTime < CACHE_DURATION)) {
+  // Serve cached sitemap if still fresh
+  if (cachedSitemap && now - lastCacheTime < CACHE_DURATION) {
     res.header("Content-Type", "application/xml");
     return res.send(cachedSitemap);
   }
 
   try {
     const baseURL = process.env.BASE_URL.trim();
-const query = JSON.stringify({
-  method: "limit",
-  values: [100]
-});
+    const allPosts = [];
+    let lastId = null;
+    let hasMore = true;
 
-const url = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=${encodeURIComponent(query)}`;
+    while (hasMore) {
+      // Limit to 100 per request
+      let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(100)`;
 
-const response = await fetch(url, {
-  headers: {
-    "X-Appwrite-Project": process.env.APPWRITE_PROJECT_ID,
-    "X-Appwrite-Key": process.env.APPWRITE_API_KEY
-  }
-});
+      // Pagination cursor
+      if (lastId) queryUrl += `&queries[]=cursorAfter("${lastId}")`;
 
-const data = await response.json();
-const allPosts = data.documents || [];
+      console.log("Fetching posts from Appwrite:", queryUrl);
 
+      const response = await fetch(queryUrl, {
+        headers: {
+          "X-Appwrite-Project": process.env.APPWRITE_PROJECT_ID,
+          "X-Appwrite-Key": process.env.APPWRITE_API_KEY
+        }
+      });
 
-    console.log("Fetched posts:", allPosts.length);
-     console.log("All documents:", JSON.stringify(allPosts, null, 2));
+      const data = await response.json();
+      const documents = data.documents || [];
 
+      allPosts.push(...documents);
 
-    // 🔥 IMPORTANT: only article URLs, no homepage
-    const urls = allPosts.map(post => `
+      if (documents.length === 100) {
+        // There are more posts to fetch
+        lastId = documents[documents.length - 1].$id;
+      } else {
+        hasMore = false;
+      }
+    }
+
+    // Filter out posts without a slug
+    const filteredPosts = allPosts.filter(post => post.slug);
+
+    console.log("Total posts fetched:", allPosts.length);
+    console.log("Posts with slugs:", filteredPosts.length);
+
+    // Generate sitemap URLs
+    const urls = filteredPosts.map(post => `
   <url>
     <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
-  </url>
-`).join("");
+  </url>`).join("");
 
-
-    if (!urls) {
-      console.log("No article URLs generated.");
-    }
+    if (!urls) console.log("No article URLs generated.");
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -164,6 +178,7 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 
 
 

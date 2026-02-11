@@ -32,7 +32,6 @@ Sitemap: ${process.env.BASE_URL}/sitemap.xml
 app.get("/sitemap.xml", async (req, res) => {
   const now = Date.now();
 
-  // Serve cached version
   if (cachedSitemap && (now - lastCacheTime < CACHE_DURATION)) {
     res.header("Content-Type", "application/xml");
     return res.send(cachedSitemap);
@@ -40,7 +39,7 @@ app.get("/sitemap.xml", async (req, res) => {
 
   try {
     const baseURL = process.env.BASE_URL;
-    const allPosts = [];
+    let allPosts = [];
     let lastId = null;
     let hasMore = true;
 
@@ -50,8 +49,6 @@ app.get("/sitemap.xml", async (req, res) => {
       if (lastId) {
         queryUrl += `&queries[]=cursorAfter("${lastId}")`;
       }
-
-      console.log("Fetching posts from:", queryUrl);
 
       const response = await fetch(queryUrl, {
         headers: {
@@ -72,37 +69,25 @@ app.get("/sitemap.xml", async (req, res) => {
       }
     }
 
-    console.log("Total posts fetched:", allPosts.length);
-    console.log("Slugs:", allPosts.map(p => p.slug));
+    console.log("Fetched posts:", allPosts.length);
 
+    // 🔥 IMPORTANT: only article URLs, no homepage
     const urls = allPosts
       .filter(post => post.slug)
       .map(post => `
   <url>
     <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
   </url>`)
       .join("");
 
-    const latestUpdate = allPosts.length
-      ? new Date(
-          Math.max(...allPosts.map(p =>
-            new Date(p.$updatedAt || p.$createdAt)
-          ))
-        ).toISOString()
-      : new Date().toISOString();
+    if (!urls) {
+      console.log("No article URLs generated.");
+    }
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseURL}</loc>
-    <lastmod>${latestUpdate}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  ${urls}
+${urls}
 </urlset>`;
 
     cachedSitemap = sitemap;
@@ -116,6 +101,7 @@ app.get("/sitemap.xml", async (req, res) => {
     res.status(500).send("Error generating sitemap");
   }
 });
+
 
 /* ===============================
    OG ARTICLE PAGE
@@ -189,4 +175,5 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 

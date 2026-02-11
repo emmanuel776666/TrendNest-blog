@@ -39,49 +39,36 @@ app.get("/sitemap.xml", async (req, res) => {
 
   try {
     const baseURL = process.env.BASE_URL;
-    let allPosts = [];
-    let lastId = null;
-    let hasMore = true;
+const query = JSON.stringify({
+  method: "limit",
+  values: [100]
+});
 
-    while (hasMore) {
-      let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=limit(100)`;
+const url = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=${encodeURIComponent(query)}`;
 
-      if (lastId) {
-        queryUrl += `&queries[]=cursorAfter("${lastId}")`;
-      }
+const response = await fetch(url, {
+  headers: {
+    "X-Appwrite-Project": process.env.APPWRITE_PROJECT_ID,
+    "X-Appwrite-Key": process.env.APPWRITE_API_KEY
+  }
+});
 
-      const response = await fetch(queryUrl, {
-        headers: {
-          "X-Appwrite-Project": process.env.APPWRITE_PROJECT_ID,
-          "X-Appwrite-Key": process.env.APPWRITE_API_KEY
-        }
-      });
+const data = await response.json();
+const allPosts = data.documents || [];
 
-      const data = await response.json();
-      const documents = data.documents || [];
-
-      allPosts.push(...documents);
-
-      if (documents.length === 100) {
-        lastId = documents[documents.length - 1].$id;
-      } else {
-        hasMore = false;
-      }
-    }
 
     console.log("Fetched posts:", allPosts.length);
      console.log("All documents:", JSON.stringify(allPosts, null, 2));
 
 
     // 🔥 IMPORTANT: only article URLs, no homepage
-    const urls = allPosts
-      .filter(post => post.slug)
-      .map(post => `
+    const urls = allPosts.map(post => `
   <url>
     <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
-  </url>`)
-      .join("");
+  </url>
+`).join("");
+
 
     if (!urls) {
       console.log("No article URLs generated.");
@@ -177,6 +164,7 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 
 
 

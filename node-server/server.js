@@ -82,6 +82,8 @@ app.get("/sitemap.xml", async (req, res) => {
   <url>
     <loc>${baseURL}/articles.html?slug=${encodeURIComponent(post.slug)}</loc>
     <lastmod>${new Date(post.$updatedAt || post.$createdAt).toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
   </url>`).join("");
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -174,6 +176,7 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
 
 
 

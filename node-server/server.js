@@ -22,7 +22,7 @@ app.get("/robots.txt", (req, res) => {
 User-agent: *
 Allow: /
 
-Sitemap: ${process.env.BASE_URL.trim()}/sitemap.xml
+Sitemap: ${process.env.SITE_URL.trim()}/sitemap.xml
 `);
 });
 

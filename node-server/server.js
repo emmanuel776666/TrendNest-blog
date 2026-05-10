@@ -11,32 +11,12 @@ const PORT = process.env.PORT || 5000;
 ================================ */
 let cachedSitemap = null;
 let lastCacheTime = 0;
-const CACHE_DURATION = 3600000; // 1 hour
+const CACHE_DURATION = 86400000; // ✅ 24 hours
 
 /* ===============================
-   ROBOT
+   GENERATE SITEMAP (FAST + SAFE)
 ================================ */
-app.get("/robots.txt", (req, res) => {
-  res.type("text/plain");
-  res.send(`
-User-agent: *
-Allow: /
-
-Sitemap: ${process.env.BASE_URL.trim()}/sitemap.xml
-`);
-});
-
-/* ===============================
-   SITEMAP WITH PAGINATION & FILTER
-================================ */
-app.get("/sitemap.xml", async (req, res) => {
-  const now = Date.now();
-
-  if (cachedSitemap && now - lastCacheTime < CACHE_DURATION) {
-    res.header("Content-Type", "application/xml");
-    return res.send(cachedSitemap);
-  }
-
+async function generateSitemap() {
   try {
     const baseURL = process.env.BASE_URL.trim();
     const allPosts = [];
@@ -44,14 +24,13 @@ app.get("/sitemap.xml", async (req, res) => {
     let hasMore = true;
 
     while (hasMore) {
-      // ✅ Correct JSON query
       const query = JSON.stringify({ method: "limit", values: [100] });
+
       let queryUrl = `${process.env.APPWRITE_ENDPOINT}/databases/${process.env.APPWRITE_DATABASE_ID}/collections/${process.env.APPWRITE_COLLECTION_ID}/documents?queries[]=${encodeURIComponent(query)}`;
 
-      // Pagination
-      if (lastId) queryUrl += `&queries[]=cursorAfter("${lastId}")`;
-
-      console.log("Fetching posts from Appwrite:", queryUrl);
+      if (lastId) {
+        queryUrl += `&queries[]=cursorAfter("${lastId}")`;
+      }
 
       const response = await fetch(queryUrl, {
         headers: {
@@ -59,6 +38,10 @@ app.get("/sitemap.xml", async (req, res) => {
           "X-Appwrite-Key": process.env.APPWRITE_API_KEY
         }
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch from Appwrite");
+      }
 
       const data = await response.json();
       const documents = data.documents || [];
@@ -72,11 +55,7 @@ app.get("/sitemap.xml", async (req, res) => {
       }
     }
 
-    // Filter out posts without slug
     const filteredPosts = allPosts.filter(post => post.slug);
-
-    console.log("Total posts fetched:", allPosts.length);
-    console.log("Posts with slugs:", filteredPosts.length);
 
     const urls = filteredPosts.map(post => `
   <url>
@@ -91,18 +70,69 @@ app.get("/sitemap.xml", async (req, res) => {
 ${urls}
 </urlset>`;
 
-    cachedSitemap = sitemap;
-    lastCacheTime = now;
+    console.log("✅ Sitemap generated:", filteredPosts.length, "posts");
 
-    res.header("Content-Type", "application/xml");
-    res.send(sitemap);
+    return sitemap;
 
   } catch (err) {
-    console.error("Sitemap error:", err);
+    console.error("❌ Sitemap generation error:", err);
+    return null;
+  }
+}
+
+/* ===============================
+   PRELOAD SITEMAP ON START
+================================ */
+(async () => {
+  cachedSitemap = await generateSitemap();
+  lastCacheTime = Date.now();
+})();
+
+/* ===============================
+   ROBOTS.TXT (CLEAN)
+================================ */
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  res.status(200).send(
+`User-agent: *
+Allow: /
+
+Sitemap: ${process.env.BASE_URL.trim()}/sitemap.xml`
+  );
+});
+
+/* ===============================
+   SITEMAP ROUTE (SUPER FAST)
+================================ */
+app.get("/sitemap.xml", async (req, res) => {
+  try {
+    const now = Date.now();
+
+    // Refresh cache if expired
+    if (!cachedSitemap || now - lastCacheTime > CACHE_DURATION) {
+      console.log("♻️ Regenerating sitemap...");
+      const newSitemap = await generateSitemap();
+
+      if (newSitemap) {
+        cachedSitemap = newSitemap;
+        lastCacheTime = now;
+      }
+    }
+
+    if (!cachedSitemap) {
+      return res.status(500).send("Sitemap not available");
+    }
+
+    res
+      .status(200)
+      .header("Content-Type", "application/xml")
+      .send(cachedSitemap);
+
+  } catch (err) {
+    console.error("❌ Sitemap route error:", err);
     res.status(500).send("Error generating sitemap");
   }
 });
-
 
 /* ===============================
    OG ARTICLE PAGE
@@ -136,8 +166,7 @@ app.get("/articles.html", async (req, res) => {
 
     res.setHeader("Cache-Control", "public, max-age=600");
 
-    res.send(`
-<!DOCTYPE html>
+    res.status(200).send(`<!DOCTYPE html>
 <html>
 <head>
   <title>${post.title} | TrendNest</title>
@@ -156,16 +185,16 @@ app.get("/articles.html", async (req, res) => {
 <body>
 
 <script>
-if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedinbot/i.test(navigator.userAgent)) {
+if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|twitterbot|whatsapp|linkedinbot/i.test(navigator.userAgent)) {
   window.location.href = "${process.env.SPA_URL}/articles.html?slug=${slug}";
 }
 </script>
 
 </body>
-</html>
-`);
+</html>`);
+    
   } catch (err) {
-    console.error("OG error:", err);
+    console.error("❌ OG error:", err);
     res.status(500).send("Server error");
   }
 });
@@ -174,14 +203,5 @@ if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|whatsapp|linkedi
    START SERVER
 ================================ */
 app.listen(PORT, () => {
-  console.log("Server running on port", PORT);
+  console.log("🚀 Server running on port", PORT);
 });
-
-
-
-
-
-
-
-
-

@@ -317,7 +317,14 @@ cron.schedule("*/5 * * * *", () => {
   console.log("Checking live matches...");
 
   getLiveMatches();
-  const express = require("express");
+
+
+// Start immediately
+getLiveMatches();
+
+console.log("Football bot running...");
+
+    const express = require("express");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -331,8 +338,3 @@ app.listen(PORT, () => {
 });
 
 });
-
-// Start immediately
-getLiveMatches();
-
-console.log("Football bot running...");

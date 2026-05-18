@@ -212,7 +212,7 @@ async function getLiveMatches() {
           const message =
 `🏳️Live: ${home} ${homeGoals}-${awayGoals} ${away}
 
-⚽ GOAL! ${scorer} ${elapsed}'
+⚽ GOAL! ${scorer} (${elapsed}')
 
 🎯 Assist: ${assist}`;
 

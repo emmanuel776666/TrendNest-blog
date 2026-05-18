@@ -28,9 +28,9 @@ const LEAGUES = "2-39";
 
 // 4PM to 11PM
 // Change anytime
-
-const START_HOUR = 20;
-const END_HOUR = 23;
+// remember 15 is 4pm and 19 is 8pm
+const START_HOUR = 18;
+const END_HOUR = 22;
 
 // =======================
 // MEMORY

@@ -319,8 +319,12 @@ cron.schedule("*/5 * * * *", () => {
   getLiveMatches();
 
 
-// Start immediately
-getLiveMatches();
+// Start after 5 minutes
+setTimeout(() => {
+  getLiveMatches();
+}, 300000);
+
+console.log("Football bot running...");
 
 
 console.log("Football bot running...");

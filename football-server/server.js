@@ -17,7 +17,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 // Saudi Pro League = 307
 
 // Change anytime
-const LEAGUES = "2-39-140-135-307-179-94-78-45-924";
+const LEAGUES = "2-39";
 
 // =======================
 // ACTIVE HOURS
@@ -325,14 +325,14 @@ getLiveMatches();
 
 console.log("Football bot running...");
   
-   // const express = require("express");
-//const app = express();
+    const express = require("express");
+   const app = express();
 
-//const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 3000;
 
-//app.get("/", (req, res) => {
-  //res.send("Football bot is running...");
-//});
+ app.get("/", (req, res) => {
+  res.send("Football bot is running...");
+});
 
 //app.listen(PORT, () => {
 //  console.log("Server running on port " + PORT);

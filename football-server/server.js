@@ -26,8 +26,6 @@ const LEAGUES = "2-39";
 // ACTIVE HOURS
 // =======================
 
-// 4PM to 11PM
-// Change anytime
 // remember 15 is 4pm and 19 is 8pm
 const START_HOUR = 18;
 const END_HOUR = 22;
@@ -39,6 +37,10 @@ const END_HOUR = 22;
 let previousScores = {};
 let postedHalfTime = {};
 let goalPosts = {};
+
+let postedKickOff = {};
+let postedFullTime = {};
+let playerGoals = {};
 
 // =======================
 // MAIN FUNCTION
@@ -98,6 +100,26 @@ async function getLiveMatches() {
       }
 
       // =======================
+      // KICK OFF
+      // =======================
+
+      if (
+        statusShort === "1H" &&
+        elapsed <= 1 &&
+        !postedKickOff[fixtureId]
+      ) {
+
+        const kickOffMessage =
+`🏳️Kick Off: ${home} 0-0 ${away}`;
+
+        await postToFacebook(kickOffMessage);
+
+        postedKickOff[fixtureId] = true;
+
+        console.log(`Kick Off Posted: ${home} vs ${away}`);
+      }
+
+      // =======================
       // HALF TIME
       // =======================
 
@@ -114,6 +136,25 @@ async function getLiveMatches() {
         postedHalfTime[fixtureId] = true;
 
         console.log(`Half Time Posted: ${home} vs ${away}`);
+      }
+
+      // =======================
+      // FULL TIME
+      // =======================
+
+      if (
+        (statusShort === "FT" || statusShort === "AET") &&
+        !postedFullTime[fixtureId]
+      ) {
+
+        const fullTimeMessage =
+`${home} ${homeGoals}-${awayGoals} ${away} [FT]`;
+
+        await postToFacebook(fullTimeMessage);
+
+        postedFullTime[fixtureId] = true;
+
+        console.log(`Full Time Posted: ${home} vs ${away}`);
       }
 
       // =======================
@@ -187,6 +228,8 @@ async function getLiveMatches() {
 
           let scorer = "Unknown Player";
           let assist = "No Assist";
+          let goalLabel = "";
+          let goalMinute = `${elapsed}'`;
 
           const events = match.events || [];
 
@@ -207,12 +250,49 @@ async function getLiveMatches() {
               assist = latestGoal.assist.name;
             }
 
+            // Extra time minute
+            if (latestGoal.time?.extra) {
+
+              goalMinute =
+`${latestGoal.time.elapsed}+${latestGoal.time.extra}'`;
+
+            }
+
+            // Track player goals
+            if (latestGoal.player?.name) {
+
+              const playerName =
+                latestGoal.player.name;
+
+              if (!playerGoals[fixtureId]) {
+                playerGoals[fixtureId] = {};
+              }
+
+              if (!playerGoals[fixtureId][playerName]) {
+                playerGoals[fixtureId][playerName] = 0;
+              }
+
+              playerGoals[fixtureId][playerName]++;
+
+              const totalGoals =
+                playerGoals[fixtureId][playerName];
+
+              if (totalGoals === 2) {
+                goalLabel = " (brace)";
+              }
+
+              else if (totalGoals === 3) {
+                goalLabel = " (hat trick)";
+              }
+
+            }
+
           }
 
           const message =
 `🏳️Live: ${home} ${homeGoals}-${awayGoals} ${away}
 
-⚽ GOAL! ${scorer} (${elapsed}')
+⚽ GOAL! ${scorer} (${goalMinute})${goalLabel}
 
 🎯 Assist: ${assist}`;
 

@@ -2,6 +2,9 @@ require("dotenv").config();
 
 const axios = require("axios");
 const cron = require("node-cron");
+const express = require("express");
+
+const app = express();
 
 const API_KEY = process.env.API_KEY;
 const PAGE_ID = process.env.PAGE_ID;
@@ -133,48 +136,48 @@ async function getLiveMatches() {
         // GOAL CANCELLED
         // =======================
 
-      if (newTotal < oldTotal) {
+        if (newTotal < oldTotal) {
 
-  const postId = goalPosts[fixtureId];
+          const postId = goalPosts[fixtureId];
 
-  if (postId) {
+          if (postId) {
 
-    let cancelledScorer = "Unknown Player";
-    let cancelledMinute = elapsed;
+            let cancelledScorer = "Unknown Player";
+            let cancelledMinute = elapsed;
 
-    const events = match.events || [];
+            const events = match.events || [];
 
-    // Find VAR/disallowed event
-    const cancelledGoal = [...events]
-      .reverse()
-      .find(event =>
-        event.type === "Var" ||
-        event.detail === "Goal Disallowed"
-      );
+            // Find VAR/disallowed event
+            const cancelledGoal = [...events]
+              .reverse()
+              .find(event =>
+                event.type === "Var" ||
+                event.detail === "Goal Disallowed"
+              );
 
-    if (cancelledGoal) {
+            if (cancelledGoal) {
 
-      if (cancelledGoal.player?.name) {
-        cancelledScorer = cancelledGoal.player.name;
-      }
+              if (cancelledGoal.player?.name) {
+                cancelledScorer = cancelledGoal.player.name;
+              }
 
-      if (cancelledGoal.time?.elapsed) {
-        cancelledMinute = cancelledGoal.time.elapsed;
-      }
+              if (cancelledGoal.time?.elapsed) {
+                cancelledMinute = cancelledGoal.time.elapsed;
+              }
 
-    }
+            }
 
-    const cancelMessage =
+            const cancelMessage =
 `❌ GOAL CANCELLED (VAR) ${cancelledScorer} ${cancelledMinute}'
 
 🏳️Live: ${home} ${homeGoals}-${awayGoals} ${away}`;
 
-    await editFacebookPost(postId, cancelMessage);
+            await editFacebookPost(postId, cancelMessage);
 
-    console.log(`Goal Cancelled: ${home} vs ${away}`);
-  }
+            console.log(`Goal Cancelled: ${home} vs ${away}`);
+          }
 
-}
+        }
 
         // =======================
         // NEW GOAL
@@ -309,7 +312,7 @@ async function editFacebookPost(postId, message) {
 }
 
 // =======================
-// RUN EVERY 1 MINUTE
+// RUN EVERY 5 MINUTES
 // =======================
 
 cron.schedule("*/5 * * * *", () => {
@@ -318,29 +321,27 @@ cron.schedule("*/5 * * * *", () => {
 
   getLiveMatches();
 
+});
 
-// Start after 5 minutes
+// Start after 2 minutes
 setTimeout(() => {
+
   getLiveMatches();
-}, 300000);
 
-console.log("Football bot running...");
+  console.log("Football bot running...");
 
+}, 120000);
 
-console.log("Football bot running...");
-  
-    const express = require("express");
-   const app = express();
+// =======================
+// EXPRESS SERVER
+// =======================
 
-  const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
- app.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Football bot is running...");
 });
 
-//app.listen(PORT, () => {
-//  console.log("Server running on port " + PORT);
-//});
-
-//});
-
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
+});

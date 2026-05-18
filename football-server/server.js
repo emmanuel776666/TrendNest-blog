@@ -20,7 +20,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 // Saudi Pro League = 307
 
 // Change anytime
-const LEAGUES = "2-39-368";
+const LEAGUES = "2-39";
 
 // =======================
 // ACTIVE HOURS
@@ -29,7 +29,7 @@ const LEAGUES = "2-39-368";
 // 4PM to 11PM
 // Change anytime
 
-const START_HOUR = 14;
+const START_HOUR = 20;
 const END_HOUR = 23;
 
 // =======================

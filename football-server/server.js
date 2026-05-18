@@ -26,7 +26,7 @@ const LEAGUES = "2-39-333";
 // 4PM to 11PM
 // Change anytime
 
-const START_HOUR = 13;
+const START_HOUR = 12;
 const END_HOUR = 23;
 
 // =======================

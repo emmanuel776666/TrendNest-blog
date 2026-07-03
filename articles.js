@@ -182,7 +182,7 @@ loadRelatedPosts(post);
 }
 
 function updateSEO(post, url) {
-    document.getElementById("page-title").innerText = `${post.title} `;
+    document.getElementById("page-title").innerText = `${post.title} | Trendnest`;
     document.getElementById("meta-description").setAttribute("content", post.description || "");
     document.getElementById("meta-keywords").setAttribute("content", post.keyword || "");
 

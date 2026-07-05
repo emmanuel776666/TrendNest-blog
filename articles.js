@@ -164,7 +164,7 @@ document.getElementById("publish-date").innerText =
         document.getElementById("post-body").innerHTML = marked.parse(post.content || "");
 
         // Canonical URL
-        const fullURL = `trendnestblogs.com/articles.html?slug=${post.slug}`;
+        const fullURL = `https://www.trendnestblogs.com/articles.html?slug=${post.slug}`;
         document.getElementById("canonical-link").setAttribute("href", fullURL);
 
         // SEO
@@ -200,7 +200,7 @@ function injectSchema(post, url) {
         "author": {
             "@type": "person",
             "name": "MEC",
-            "url": "trendnestblogs.com/mec/"
+            "url": "https://www.trendnestblogs.com/mec/"
         },
         "publisher": {
             "@type": "Organization",

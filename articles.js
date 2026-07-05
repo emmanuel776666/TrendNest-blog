@@ -200,14 +200,14 @@ function injectSchema(post, url) {
         "author": {
             "@type": "person",
             "name": "MEC",
-            "url": "https://www.trend-nest-latest-blog.name.ng/mec/"
+            "url": "trendnestblogs.com/mec/"
         },
         "publisher": {
             "@type": "Organization",
             "name": "TrendNest",
             "logo": {
                 "@type": "ImageObject",
-                "url": "https://raw.githubusercontent.com/emmanuel776666/TrendNest-blog/refs/heads/main/IMG-20250818-WA0002.png"
+                "url": ""
             }
         },
         "url": url,

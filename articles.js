@@ -59,7 +59,7 @@ async function loadRelatedPosts(currentPost) {
       <a href="articles.html?slug=${post.slug}">
         <div class="related-item">
           <img src="${post.image}" alt="${post.subheading}" loading="lazy">
-          <p>${post.subheading}</p>
+          <p>${post.title}</p>
         </div>
       </a>
     `).join("");

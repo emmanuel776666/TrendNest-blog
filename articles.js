@@ -207,7 +207,7 @@ function injectSchema(post, url) {
             "name": "TrendNest",
             "logo": {
                 "@type": "ImageObject",
-                "url": "trendnest691871f4a48d4cf38ca89def.png"
+                "url": "https://raw.githubusercontent.com/emmanuel776666/TrendNest-blog/refs/heads/main/trendnest691871f4a48d4cf38ca89def.png"
             }
         },
         "url": url,

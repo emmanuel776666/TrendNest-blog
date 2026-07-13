@@ -160,7 +160,13 @@ document.getElementById("publish-date").innerText =
 
         // Content
         document.getElementById("post-title").innerText = post.subheading;
-        document.getElementById("post-image").src = post.image;
+       const postImage = document.getElementById("post-image");
+
+postImage.onload = () => {
+    postImage.style.display = "block";
+};
+
+postImage.src = post.image;
         document.getElementById("post-body").innerHTML = marked.parse(post.content || "");
 
         // Canonical URL

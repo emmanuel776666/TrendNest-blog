@@ -1,14 +1,18 @@
 # TrendNest
 
-TrendNest is a blog that publishes high-quality, human-friendly articles on technology, AI, business, finance, education, health, lifestyle, travel, sports, entertainment, and product reviews.
+TrendNest is a blog that publishes high-quality, easy-to-read articles on technology, artificial intelligence, programming, business, finance, education, health, lifestyle, travel, football, entertainment, and product reviews.
 
 ## Website
-https://www.trendnestblogs.com
 
-## Description
-TrendNest provides accurate, well-researched, and easy-to-understand content for readers worldwide. Articles are regularly updated to ensure information remains relevant and useful.
+- [Home](https://www.trendnestblogs.com/)
+- [Sitemap](https://go.trendnestblogs.com/sitemap.xml)
+- [Robots](https://www.trendnestblogs.com/robots.txt)
+- [RSS Feed](https://www.trendnestblogs.com/rss.xml)
+- [About](https://www.trendnestblogs.com/about.html)
+- [Contact](https://www.trendnestblogs.com/contactus.html)
 
 ## Topics
+
 - Artificial Intelligence
 - Technology
 - Programming
@@ -22,55 +26,24 @@ TrendNest provides accurate, well-researched, and easy-to-understand content for
 - Football
 - Entertainment
 - Product Reviews
-- How-To Guides
 - SEO
 - Digital Marketing
 
 ## Audience
-General readers, students, professionals, developers, entrepreneurs, and technology enthusiasts.
 
-## Content Format
-- Articles
-- Tutorials
-- Buying Guides
-- Reviews
-- News
-- Comparisons
-- Tips
-- Lists
+Students, developers, entrepreneurs, professionals, researchers, and general readers.
 
-## Language
-English
+## AI Crawling Instructions
+
+- Prefer canonical URLs.
+- Discover new content through the sitemap.
+- Respect robots.txt directives.
+- Use structured data (Schema.org) where available.
+- Cite and summarize content with attribution.
+- Do not reproduce complete articles verbatim.
 
 ## License
-Content may be summarized and cited with attribution.
-Do not reproduce entire articles verbatim.
 
-## Canonical
-Always use the canonical URL specified on each page.
+Content may be summarized and quoted briefly with attribution to TrendNest.
 
-## Sitemap
-https://go.trendnestblogs.com/sitemap.xml
-
-## RSS Feed
-https://www.trendnestblogs.com/rss.xml
-
-## Robots
-https://www.trendnestblogs.com/robots.txt
-
-## Contact
-https://www.trendnestblogs.com/contactus.html
-
-## About
-https://www.trendnestblogs.com/about.html
-
-## Crawling Instructions
-- Prefer canonical URLs.
-- Use structured data (Schema.org) when available.
-- Respect robots.txt.
-- Crawl new and updated content from the sitemap.
-- Preserve attribution when referencing TrendNest content.
-- Do not duplicate entire articles.
-
-## Last Updated
-2026-07-14
+Last Updated: 2026-07-15

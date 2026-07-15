@@ -113,6 +113,7 @@ function displayArticles(posts) {
             <a
                 href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLINK)}"
                 target="_blank"
+                aria-label="Share on Facebook"
                 rel="noopener noreferrer"
                 style="font-size:20px;color:white;"
             >
@@ -123,6 +124,7 @@ function displayArticles(posts) {
                                 <a
                                     href="https://twitter.com/intent/tweet?url=${encodeURIComponent(shareLINK)}"
                                     target="_blank"
+                                    aria-label="Share on X"
                                     rel="noopener noreferrer"
                                     style="font-size:20px;color:white;"
                                 >
@@ -133,6 +135,7 @@ function displayArticles(posts) {
             <a
                 href="https://wa.me/?text=${encodeURIComponent(shareLINK)}"
                 target="_blank"
+                aria-label="Share on WhatsApp"
                 rel="noopener noreferrer"
                 style="font-size:20px;color:white;"
             >

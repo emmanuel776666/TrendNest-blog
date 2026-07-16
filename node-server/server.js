@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 ================================ */
 let cachedSitemap = null;
 let lastCacheTime = 0;
-const CACHE_DURATION = 86400000; // ✅ 24 hours
+const CACHE_DURATION = 60 * 60 * 1000; // ✅ 1 hours
 
 /* ===============================
    GENERATE SITEMAP (FAST + SAFE)

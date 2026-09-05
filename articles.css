@@ -116,7 +116,7 @@ ins.adsbygoogle iframe {
 
 .post-body {
   font-size: 18px;
-  line-height: 1.5;
+  line-height: 1.7;
   margin: 20px 0;
   font-family: Georgia, serif;
   color: #111;
@@ -255,11 +255,11 @@ ins.adsbygoogle iframe {
   font-size: 30px;
   font-weight: 495;
   font-family: Georgia, serif;
-  margin: 10px 0;
+  margin: 25px 0 15px;
 }
 /*para is to give space between article both up and down*/
 .para{
-  margin: 8px 0;
+  margin: 20px 0;
 }
 .blog-image {
   margin: 10px 0;

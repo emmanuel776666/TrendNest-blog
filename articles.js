@@ -21,13 +21,13 @@ async function loadRelatedPosts(currentPost) {
     const relatedContainer = document.querySelector(".related-blocks");
     relatedContainer.innerHTML = "Loading related content...";
 
-    // 1️⃣ Get 20 latest posts
+    // 1️⃣ Get 9 latest posts
     const response = await databases.listDocuments(
       DATABASE_ID,
       COLLECTION_ID,
       [
         Query.orderDesc("$createdAt"),
-        Query.limit(8)
+        Query.limit(9)
       ]
     );
 
@@ -36,7 +36,7 @@ async function loadRelatedPosts(currentPost) {
     // 2️⃣ Remove the current post
     posts = posts.filter(p => p.slug !== currentPost.slug);
 
-    // 3️⃣ Find similar posts (based on subheading words)
+    // 3️⃣ Find similar posts
     const currentWords = currentPost.subheading.toLowerCase().split(" ");
 
     let similar = posts.filter(post => {
@@ -44,21 +44,30 @@ async function loadRelatedPosts(currentPost) {
       return currentWords.some(word => words.includes(word));
     });
 
-    // 4️⃣ If similar < 20, fill with other latest posts
+    // 4️⃣ Fill with other latest posts if needed
     let finalPosts = [...similar];
 
     for (let post of posts) {
       if (!finalPosts.includes(post)) {
         finalPosts.push(post);
       }
-      if (finalPosts.length === 20) break;
+
+      // Stop at 9 related posts
+      if (finalPosts.length === 9) break;
     }
 
     // 5️⃣ Render
     relatedContainer.innerHTML = finalPosts.map(post => `
       <a href="articles.html?slug=${post.slug}">
         <div class="related-item">
-          <img src="${post.image}" alt="${post.subheading}" loading="lazy">
+          <img
+            src="${post.image}"
+            alt="${post.subheading}"
+            width="300"
+            height="200"
+            loading="lazy"
+            decoding="async"
+          >
           <p>${post.title}</p>
         </div>
       </a>
@@ -66,7 +75,8 @@ async function loadRelatedPosts(currentPost) {
 
   } catch (err) {
     console.error("Related load error:", err);
-    document.querySelector(".related-blocks").innerHTML = "Unable to load related content.";
+    document.querySelector(".related-blocks").innerHTML =
+      "Unable to load related content.";
   }
 }
 

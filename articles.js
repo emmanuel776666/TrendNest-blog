@@ -27,7 +27,7 @@ async function loadRelatedPosts(currentPost) {
       COLLECTION_ID,
       [
         Query.orderDesc("$createdAt"),
-        Query.limit(20)
+        Query.limit(8)
       ]
     );
 

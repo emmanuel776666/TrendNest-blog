@@ -27,12 +27,13 @@ async function loadRelatedPosts(currentPost) {
       COLLECTION_ID,
       [
         Query.orderDesc("$createdAt"),
-        Query.limit(9)
+        Query.limit(11)
       ]
     );
 
     let posts = response.documents;
-
+  // Shuffle posts randomly
+    posts.sort(() => Math.random() - 0.5);
     // 2️⃣ Remove the current post
     posts = posts.filter(p => p.slug !== currentPost.slug);
 
@@ -53,7 +54,7 @@ async function loadRelatedPosts(currentPost) {
       }
 
       // Stop at 9 related posts
-      if (finalPosts.length === 9) break;
+      if (finalPosts.length === 11) break;
     }
 
     // 5️⃣ Render

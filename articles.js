@@ -232,7 +232,8 @@ function injectSchema(post, url) {
 }
 
 // Start
-loadPostBySlug();
+
+    loadPostBySlug();
 
 
 

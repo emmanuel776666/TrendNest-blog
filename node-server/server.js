@@ -1,10 +1,19 @@
 import express from "express";
 import fetch from "node-fetch";
 import dotenv from "dotenv";
+import { marked } from "marked";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+ 
 /* ===============================
    HEALTH CHECK
 ================================ */
@@ -143,11 +152,21 @@ app.get("/sitemap.xml", async (req, res) => {
 /* ===============================
    OG ARTICLE PAGE
 ================================ */
+app.get("/test", (req, res) => {
+  res.send("TEST ROUTE WORKS");
+});
 app.get("/articles.html", async (req, res) => {
+  console.log("🟢 NEW ARTICLE ROUTE IS RUNNING");
+  console.log("🔥 SERVER ARTICLE ROUTE WAS CALLED");
+
   const slug = req.query.slug;
-  if (!slug) return res.status(400).send("No slug");
+
+  if (!slug) {
+    return res.status(400).send("No slug");
+  }
 
   try {
+    // Get article from Appwrite
     const query = JSON.stringify({
       method: "equal",
       attribute: "slug",
@@ -163,48 +182,106 @@ app.get("/articles.html", async (req, res) => {
       }
     });
 
+    if (!response.ok) {
+      throw new Error("Failed to fetch article from Appwrite");
+    }
+
     const data = await response.json();
     const post = data.documents?.[0];
 
-    if (!post) return res.status(404).send("Post not found");
+    if (!post) {
+      return res.status(404).send("Post not found");
+    }
 
-    const pageURL = `${process.env.BASE_URL}/articles.html?slug=${slug}`;
+    // Convert Markdown content to HTML
+    const articleHTML = marked.parse(post.content || "");
 
-    res.setHeader("Cache-Control", "public, max-age=600");
+    // Read your existing articles.html
+    const filePath = path.join(__dirname, "..", "articles.html");
+let html = fs.readFileSync(filePath, "utf8");
 
-    res.status(200).send(`<!DOCTYPE html>
-<html>
-<head>
-  <title>${post.title} | TrendNest</title>
+console.log("📄 HTML FILE:", filePath);
+console.log("📏 HTML LENGTH:", html.length);
 
-  <meta property="og:title" content="${post.subheading}">
-  <meta property="og:description" content="${post.description || ""}">
-  <meta property="og:image" content="${post.image}">
-  <meta property="og:url" content="${pageURL}">
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="TrendNest">
+    // Put article data into the existing HTML
+    html = html
+      .replace('<title id="page-title">Loading</title>',
+        `<title id="page-title">${post.title} | TrendNest</title>`)
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${post.subheading}">
-  <meta name="twitter:image" content="${post.image}">
-</head>
-<body>
+      .replace(
+        '<meta name="description" id="meta-description" content="">',
+        `<meta name="description" id="meta-description" content="${post.description || ""}">`
+      )
 
-<script>
-if (!/facebookexternalhit|facebot|meta-externalagent|twitterbot|twitterbot|whatsapp|linkedinbot/i.test(navigator.userAgent)) {
-  window.location.href = "${process.env.SPA_URL}/articles.html?slug=${slug}";
-}
-</script>
+      .replace(
+        '<meta name="keywords" id="meta-keywords" content="">',
+        `<meta name="keywords" id="meta-keywords" content="${post.keyword || ""}">`
+      )
 
-</body>
-</html>`);
-    
+      .replace(
+        '<link rel="canonical" id="canonical-link" href="">',
+        `<link rel="canonical" id="canonical-link" href="${process.env.BASE_URL}/articles.html?slug=${encodeURIComponent(post.slug)}">`
+      )
+
+      .replace(
+        '<meta property="og:title" id="og-title" content="">',
+        `<meta property="og:title" id="og-title" content="${post.title}">`
+      )
+
+      .replace(
+        '<meta property="og:image" id="og-image" content="">',
+        `<meta property="og:image" id="og-image" content="${post.image || ""}">`
+      )
+
+      .replace(
+        '<meta property="og:url" id="og-url" content="">',
+        `<meta property="og:url" id="og-url" content="${process.env.BASE_URL}/articles.html?slug=${encodeURIComponent(post.slug)}">`
+      )
+
+      .replace(
+        '<meta property="og:description" id="og-description" content="">',
+        `<meta property="og:description" id="og-description" content="${post.description || ""}">`
+      )
+
+      .replace(
+        '<meta name="twitter:title" id="twitter-title" content="">',
+        `<meta name="twitter:title" id="twitter-title" content="${post.title}">`
+      )
+
+      .replace(
+        '<meta name="twitter:image" id="twitter-image" content="">',
+        `<meta name="twitter:image" id="twitter-image" content="${post.image || ""}">`
+      )
+
+      .replace(
+        '<h2 class="post-title" id="post-title">Loading...</h2>',
+        `<h2 class="post-title" id="post-title">${post.title}</h2>`
+      )
+
+      .replace(
+        '<img src="whiteimageforloading.webp" id="post-image" alt="" width="665" height="443" loading="eager" fetchpriority="high" decoding="async">',
+        `<img src="${post.image || ""}" id="post-image" alt="${post.title}" width="665" height="443" loading="eager" fetchpriority="high" decoding="async">`
+      )
+
+      .replace(
+        '<p class="publish-date" id="publish-date">Published Loading...</p>',
+        `<p class="publish-date" id="publish-date">Published ${new Date(post.$createdAt).toLocaleDateString()}</p>`
+      )
+
+      .replace(
+        '<div class="post-body" id="post-body">Loading content...</div>',
+        `<div class="post-body" id="post-body">${articleHTML}</div>`
+      );
+
+    // Send the completed page
+    res.status(200).send(html);
+
   } catch (err) {
-    console.error("❌ OG error:", err);
+    console.error("❌ Article error:", err);
     res.status(500).send("Server error");
   }
 });
-
+app.use(express.static(path.join(__dirname, "..")));
 /* ===============================
    START SERVER
 ================================ */

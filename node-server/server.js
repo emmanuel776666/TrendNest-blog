@@ -18,9 +18,8 @@ const PORT = process.env.PORT || 5000;
    HEALTH CHECK
 ================================ */
 app.get("/", (req, res) => {
-  res.status(200).send("TrendNest server is running 🚀");
+  res.sendFile(path.join(__dirname, "..", "index.html"));
 });
-
 /* ===============================
    GLOBAL SITEMAP CACHE
 ================================ */

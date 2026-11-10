@@ -192,22 +192,32 @@ app.get("/articles.html", async (req, res) => {
       return res.status(404).send("Post not found");
     }
    
-// Create the original article URL on your main website
-const articleUrl = `${process.env.BASE_URL.replace(/\/$/, "")}/articles.html?slug=${encodeURIComponent(post.slug)}`;
 
-// Identify social media crawlers
-const userAgent = req.headers["user-agent"] || "";
+    // Build the original article URL on the main website
+    const articleUrl = new URL(
+      "/articles.html",
+      process.env.BASE_URL
+    );
 
-const isSocialCrawler =
-  /facebookexternalhit|facebot|whatsapp|twitterbot|linkedinbot|telegrambot|slackbot|discordbot|pinterest|skypeuripreview|googlebot|bingbot/i.test(userAgent);
+    articleUrl.searchParams.set("slug", post.slug);
 
-// Redirect normal visitors to GitHub Pages
-if (!isSocialCrawler) {
-  return res.redirect(302, articleUrl);
-}
+    // Identify social media crawlers
+    const userAgent = req.headers["user-agent"] || "";
 
-console.log("🤖 Social crawler detected:", userAgent);
-console.log("✅ Generating OG preview for:", post.slug);
+    const isSocialCrawler =
+      /facebookexternalhit|facebot|whatsapp|twitterbot|linkedinbot|telegrambot|slackbot|discordbot|pinterest|skypeuripreview|googlebot|bingbot/i.test(userAgent);
+
+    console.log("🌐 Incoming User-Agent:", userAgent);
+
+    // Redirect normal visitors to the main website
+    if (!isSocialCrawler) {
+      console.log("➡️ Redirecting visitor to:", articleUrl.href);
+
+      return res.redirect(302, articleUrl.href);
+    }
+
+    // Let social media crawlers receive the generated OG HTML
+    console.log("🤖 Social crawler detected:", userAgent);
 
     // Convert Markdown content to HTML
     const articleHTML = marked.parse(post.content || "");

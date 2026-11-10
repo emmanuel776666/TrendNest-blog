@@ -191,6 +191,23 @@ app.get("/articles.html", async (req, res) => {
     if (!post) {
       return res.status(404).send("Post not found");
     }
+   
+// Create the original article URL on your main website
+const articleUrl = `${process.env.BASE_URL.replace(/\/$/, "")}/articles.html?slug=${encodeURIComponent(post.slug)}`;
+
+// Identify social media crawlers
+const userAgent = req.headers["user-agent"] || "";
+
+const isSocialCrawler =
+  /facebookexternalhit|facebot|whatsapp|twitterbot|linkedinbot|telegrambot|slackbot|discordbot|pinterest|skypeuripreview|googlebot|bingbot/i.test(userAgent);
+
+// Redirect normal visitors to GitHub Pages
+if (!isSocialCrawler) {
+  return res.redirect(302, articleUrl);
+}
+
+console.log("🤖 Social crawler detected:", userAgent);
+console.log("✅ Generating OG preview for:", post.slug);
 
     // Convert Markdown content to HTML
     const articleHTML = marked.parse(post.content || "");
@@ -219,7 +236,7 @@ console.log("📏 HTML LENGTH:", html.length);
 
       .replace(
         '<link rel="canonical" id="canonical-link" href="">',
-        `<link rel="canonical" id="canonical-link" href="${process.env.BASE_URL}/articles.html?slug=${encodeURIComponent(post.slug)}">`
+        `<link rel="canonical" id="canonical-link" href="${articleUrl}">`
       )
 
       .replace(
@@ -234,7 +251,7 @@ console.log("📏 HTML LENGTH:", html.length);
 
       .replace(
         '<meta property="og:url" id="og-url" content="">',
-        `<meta property="og:url" id="og-url" content="${process.env.BASE_URL}/articles.html?slug=${encodeURIComponent(post.slug)}">`
+        `<meta property="og:url" id="og-url" content="${articleUrl}">`
       )
 
       .replace(
